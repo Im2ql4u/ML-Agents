@@ -47,6 +47,20 @@ The installer will ask whether you want Cursor, VS Code, or both.
 - Adds `.agentic-backup/` to `.gitignore` automatically
 - Never overwrites live log files
 
+### One-command apply in any existing repo
+
+From the root of the target repo:
+
+```bash
+bash ~/ML-Agents/install.sh
+```
+
+Behavior in existing repos:
+- Workflow-managed agent files are updated to this repository's versions
+- Previous versions of those files are moved to `.agentic-backup/YYYY-MM-DD_HH-MM/` first (not deleted)
+- Existing `SESSION_LOG.md`, `DECISIONS.md`, `JOURNAL.md`, `ARCHIVE.md` are never overwritten
+- Agent files that are not part of this workflow remain untouched
+
 ---
 
 ## Update
@@ -58,6 +72,20 @@ bash ~/ML-Agents/update.sh
 ```
 
 This pulls the latest workflow changes and re-runs the installer. Your existing files that differ from the new versions are backed up before being replaced.
+
+---
+
+## Prompt parity check
+
+Use this to verify Cursor and VS Code prompt files stay semantically aligned:
+
+```bash
+./scripts/check_prompt_parity.sh
+```
+
+Exit code:
+- `0` means all mapped pairs are aligned
+- `1` means at least one pair drifted (or a file is missing)
 
 ---
 

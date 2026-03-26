@@ -1,5 +1,3 @@
----
-
 # Core Rules — Always Active
 
 ---
@@ -110,6 +108,47 @@ Ask the human what they expect the next step to produce, or how they would descr
 - Continue past a workaround without flagging it
 - Assume a result is good because the number went up
 - Soften an honest assessment to avoid friction
+
+---
+
+## Session mode defaults
+
+- Default to lightweight session flow (`session-open` Task Focus and `session-close` Quick Close).
+- Use Full mode only when risk, uncertainty, or scope requires it.
+- Trigger Full mode when any of these are true:
+  - New branch, major pivot, or architecture/data split/evaluation protocol changes are likely
+  - Repeated failures on the same issue
+  - Contradiction with prior session conclusions
+  - Context freshness is stale or unknown
+
+---
+
+## Decision thresholds
+
+Pause and ask for confirmation when the change affects project direction or interpretability. Required pause for:
+
+- Architecture changes
+- Data split or evaluation protocol changes
+- New dependency additions
+- Introduction or modification of a workaround
+
+For low-impact local choices (naming, trivial refactors, formatting, straightforward bugfixes), inform clearly and continue without forcing a pause.
+
+---
+
+## Minimum evidence gates
+
+Before claiming progress on implementation:
+
+- One known-input correctness check passed
+- One baseline comparison reported (or explicitly unavailable with reason)
+- One explicit uncertainty stated
+
+Before claiming validation confidence:
+
+- One leakage/confound check performed
+- At least one plausible alternative explanation considered
+- One concrete next verification step stated
 
 ---
 

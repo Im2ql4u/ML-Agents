@@ -9,3 +9,5 @@ See ARCHIVE.md for full history.
 **Unverified assumptions:** *(filled by session-close)*
 **Active workarounds:** *(filled by session-close)*
 **Foundation status:** *(filled by session-close)*
+**Context freshness:** *(fresh / stale / unknown)*
+**Contradiction flags:** *(none / short note if current conclusions conflict with prior logs)*

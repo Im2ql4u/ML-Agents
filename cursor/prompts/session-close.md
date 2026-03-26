@@ -1,14 +1,101 @@
 # Session Close
 
-> **How to use:** `@session-close.md` at the end of every session. Run before closing Cursor.
+> **How to use:**
+> - Default (recommended): `@session-close.md` (Quick Close)
+> - Full end-of-session ritual: `@session-close.md full` (Full Close)
 
 ---
 
-Close the session properly. Do this in order. Do not skip steps.
+Close the session properly.
 
 ---
 
-## Step 1 — Reflection questions first
+## Step 0 — Choose close mode (default is Quick Close)
+
+Use **Quick Close** by default.
+
+Switch to **Full Close** if any are true:
+
+- An experiment was run
+- A genuine architectural or methodological decision was made
+- A workaround was introduced or changed
+- There is unresolved uncertainty that could mislead next session
+
+If uncertain, choose Full Close.
+
+---
+
+## Quick Close (default)
+
+### Step 1 — Ask two reflection questions
+
+Ask and wait for answers:
+
+1. What is the single most important thing to carry into the next session?
+2. What is still uncertain or risky right now?
+
+### Step 2 — Append a compact ARCHIVE entry
+
+Append:
+
+```
+## [YYYY-MM-DD] — <session title>
+
+### Technical summary
+- Goal: <one line>
+- Accomplished: <one line>
+- Not done / blocked: <one line>
+- Recommended next action: <one line>
+
+### Human reflection
+**Carry forward:** <answer 1>
+**Still uncertain:** <answer 2>
+
+---
+```
+
+### Step 3 — Update SESSION_LOG.md for fast restart
+
+Replace with only:
+
+```
+# Session Log
+
+Last session: [YYYY-MM-DD] — <title>
+See ARCHIVE.md for full history.
+
+## Next session
+**Recommended starting point:** <from summary>
+**Open questions:** <from summary>
+**Unverified assumptions:** <anything assumed but not checked>
+**Active workarounds:** <list TODOs currently in codebase>
+**Foundation status:** <brief: what is verified, what is assumed>
+**Context freshness:** fresh / stale / unknown
+**Contradiction flags:** none / <short note if current conclusions conflict with prior logs>
+```
+
+### Step 4 — Report in chat
+
+Say in chat:
+
+```
+Session closed (Quick Close).
+
+**Archive entry written:** [YYYY-MM-DD] — <title>
+**SESSION_LOG.md:** reset for next session
+
+Key carry-forward:
+- <most important next action>
+- <most important uncertainty>
+```
+
+---
+
+## Full Close (opt-in)
+
+Use this for sessions with experiments, major decisions, or high uncertainty.
+
+### Step 1 — Reflection questions first
 
 Before writing anything to the logs, ask the human these questions and wait for answers:
 
@@ -21,7 +108,7 @@ Record their answers verbatim in the archive entry. These are as important as th
 
 ---
 
-## Step 2 — Write the session digest
+### Step 2 — Write the session digest
 
 Now write the compressed digest. Answer only these questions — not a transcript:
 
@@ -39,7 +126,7 @@ Target: 20–30 lines. If longer, you are summarizing events not conclusions.
 
 ---
 
-## Step 3 — Append to ARCHIVE.md
+### Step 3 — Append to ARCHIVE.md
 
 ```
 ## [YYYY-MM-DD] — <session title>
@@ -60,7 +147,7 @@ If ARCHIVE.md exceeds 10 entries, compress the oldest 5 into a `## Older History
 
 ---
 
-## Step 4 — Update DECISIONS.md
+### Step 4 — Update DECISIONS.md
 
 Only if a genuine architectural or methodological decision was made:
 
@@ -77,7 +164,7 @@ Zero entries per session is fine. Do not pad this file.
 
 ---
 
-## Step 5 — Update JOURNAL.md
+### Step 5 — Update JOURNAL.md
 
 Only if an experiment was run:
 
@@ -98,7 +185,7 @@ If JOURNAL.md exceeds 8 entries, compress the oldest 4 into `## Earlier Experime
 
 ---
 
-## Step 6 — Reset SESSION_LOG.md
+### Step 6 — Reset SESSION_LOG.md
 
 Replace with only:
 
@@ -114,11 +201,13 @@ See ARCHIVE.md for full history.
 **Unverified assumptions:** <anything assumed but not checked>
 **Active workarounds:** <list TODOs currently in codebase>
 **Foundation status:** <brief: what is verified, what is assumed>
+**Context freshness:** fresh / stale / unknown
+**Contradiction flags:** none / <short note if current conclusions conflict with prior logs>
 ```
 
 ---
 
-## Step 7 — Report in chat
+### Step 7 — Report in chat
 
 After writing all logs, say in chat:
 
