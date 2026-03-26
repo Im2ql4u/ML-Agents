@@ -28,9 +28,9 @@ echo ""
 echo -e "Pulling latest from workflow repo..."
 cd "$SCRIPT_DIR"
 
-# Migrate old repo naming if needed.
+# Migrate old underscore repo naming if needed.
 CURRENT_ORIGIN_URL="$(git remote get-url origin 2>/dev/null || true)"
-if [[ "$CURRENT_ORIGIN_URL" == *"ML_Agents"* ]]; then
+if [[ "$CURRENT_ORIGIN_URL" == *"ML_Agents"* || "$CURRENT_ORIGIN_URL" == *"ml_agents"* ]]; then
   echo -e "${YELLOW}!${RESET}  Detected old origin URL: $CURRENT_ORIGIN_URL"
   git remote set-url origin "$CANONICAL_REPO_URL"
   echo -e "${GREEN}✓${RESET}  Updated origin to: $CANONICAL_REPO_URL"

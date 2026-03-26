@@ -25,7 +25,7 @@ Clone this repo once, anywhere on your machine:
 git clone https://github.com/Im2ql4u/ML-Agents.git ~/ML-Agents
 ```
 
-If you previously cloned an older `ML_Agents` repository, replace it:
+If you previously cloned an older underscore-named repository, replace it:
 
 ```bash
 rm -rf ~/ML_Agents
