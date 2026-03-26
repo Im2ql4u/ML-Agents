@@ -1,6 +1,6 @@
 ---
 description: "Elaborated engineering plan. Run after brainstorm/diagnose/review has established direction. Produces a full specification: architecture, training design, evaluation protocol, step-by-step with verifications, risk register. Use Copilot agent mode."
-mode: agent
+agent: agent
 ---
 
 ${input:context:Briefly describe what was decided in the preceding brainstorm or diagnose session, and what this plan needs to cover.}

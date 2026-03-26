@@ -1,6 +1,6 @@
 ---
 description: "Full implementation cycle — build, run, examine results honestly, report. Does not stop when code runs. Stops when results are understood. Requires confirmed plan."
-mode: agent
+agent: agent
 ---
 
 ${input:task:Describe the task to implement. A confirmed plan should already exist.}
