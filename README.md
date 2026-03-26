@@ -1,4 +1,4 @@
-# agentic-workflow
+# ML-Agents
 
 A structured agentic coding workflow for ML and scientific computing projects. Works with Cursor and VS Code Copilot.
 
@@ -22,13 +22,20 @@ The workflow is built around a few core principles:
 Clone this repo once, anywhere on your machine:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/agentic-workflow.git ~/agentic-workflow
+git clone https://github.com/Im2ql4u/ML-Agents.git ~/ML-Agents
+```
+
+If you previously cloned an older `ML_Agents` repository, replace it:
+
+```bash
+rm -rf ~/ML_Agents
+git clone https://github.com/Im2ql4u/ML-Agents.git ~/ML-Agents
 ```
 
 Then, from the root of any project repo you want to add the workflow to:
 
 ```bash
-bash ~/agentic-workflow/install.sh
+bash ~/ML-Agents/install.sh
 ```
 
 The installer will ask whether you want Cursor, VS Code, or both.
@@ -47,7 +54,7 @@ The installer will ask whether you want Cursor, VS Code, or both.
 When this repo is updated, pull and re-run from your project repo:
 
 ```bash
-bash ~/agentic-workflow/update.sh
+bash ~/ML-Agents/update.sh
 ```
 
 This pulls the latest workflow changes and re-runs the installer. Your existing files that differ from the new versions are backed up before being replaced.

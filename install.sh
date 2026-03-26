@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # =============================================================================
-# agentic-workflow installer
+# ML-Agents installer
 # =============================================================================
 # Run from the root of the project repo you want to install the workflow into.
 #
 # Usage:
-#   From a local clone of agentic-workflow:
-#     bash /path/to/agentic-workflow/install.sh
+#   From a local clone of ML-Agents:
+#     bash /path/to/ML-Agents/install.sh
 #
 #   Directly from GitHub (no clone needed):
-#     bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/agentic-workflow/main/install.sh)
+#     bash <(curl -fsSL https://raw.githubusercontent.com/Im2ql4u/ML-Agents/main/install.sh)
 #
 # What it does:
 #   - Installs Cursor and/or VS Code prompt/rules files into your project repo
@@ -32,12 +32,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # and require a local clone in that case
 if [[ "$SCRIPT_DIR" == /dev/fd* ]] || [[ "$SCRIPT_DIR" == /proc/* ]]; then
   echo ""
-  echo "ERROR: This script must be run from a local clone of agentic-workflow."
+  echo "ERROR: This script must be run from a local clone of ML-Agents."
   echo "       The curl pipe method requires --local flag workaround."
   echo ""
   echo "To use directly from GitHub, clone the repo first:"
-  echo "  git clone https://github.com/YOUR_USERNAME/agentic-workflow.git"
-  echo "  bash agentic-workflow/install.sh"
+  echo "  git clone https://github.com/Im2ql4u/ML-Agents.git"
+  echo "  bash ML-Agents/install.sh"
   echo ""
   exit 1
 fi
@@ -137,7 +137,7 @@ ensure_gitignored() {
 
   if ! grep -qF "$pattern" "$gitignore"; then
     echo "" >> "$gitignore"
-    echo "# agentic-workflow installer backups" >> "$gitignore"
+    echo "# ML-Agents installer backups" >> "$gitignore"
     echo "$pattern" >> "$gitignore"
     success "Added $pattern to .gitignore"
   fi
@@ -147,14 +147,14 @@ ensure_gitignored() {
 # Welcome
 # ---------------------------------------------------------------------------
 echo ""
-echo -e "${BOLD}agentic-workflow installer${RESET}"
+echo -e "${BOLD}ML-Agents installer${RESET}"
 echo -e "Installing into: ${CYAN}$TARGET_DIR${RESET}"
 echo -e "Source:          ${CYAN}$SOURCE_DIR${RESET}"
 echo ""
 
 # Confirm we are in a project repo (not the workflow repo itself)
 if [[ "$TARGET_DIR" == "$SOURCE_DIR" ]]; then
-  warn "You appear to be running this inside the agentic-workflow repo itself."
+  warn "You appear to be running this inside the ML-Agents repo itself."
   warn "Run this from the root of the project repo you want to install into."
   exit 1
 fi
