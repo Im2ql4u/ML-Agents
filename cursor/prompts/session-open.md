@@ -43,6 +43,7 @@ Read:
 - `DECISIONS.md` — latest 1–2 entries
 - `JOURNAL.md` — latest 1–2 entries
 - `ARCHIVE.md` — latest entry only
+- `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` — if present; otherwise `EXECUTION_KERNEL.md` and `core/orchestrator.md` if present
 
 Note missing files.
 
@@ -92,6 +93,7 @@ Read these files in full if they exist. Note any that are missing.
 - `DECISIONS.md` — full file
 - `JOURNAL.md` — full file
 - `ARCHIVE.md` — last 3 entries only
+- `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` — if present; otherwise `EXECUTION_KERNEL.md` and `core/orchestrator.md` if present
 
 ### Step 2 — Read the repo
 

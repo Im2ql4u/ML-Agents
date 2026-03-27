@@ -17,6 +17,10 @@ Your job is to find where the problem actually lives — not to suggest the most
 
 Before any fix is proposed, the problem must be located in the stack. Only then does a fix make sense.
 
+Apply `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when present. If absent, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`.
+
+During diagnosis cycles, use plan -> act -> observe -> reflect with the smallest possible checks. If diagnosis identifies claim-integrity uncertainty, escalate to evaluation expert. If diagnosis identifies boundary/debt risk in proposed fixes, escalate to codebase expert.
+
 ---
 
 ## Step 1 — Characterize the failure honestly

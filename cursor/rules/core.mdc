@@ -128,6 +128,29 @@ Ask the human what they expect the next step to produce, or how they would descr
 
 ---
 
+## Universal routing and orchestration
+
+Apply the Execution Kernel and Orchestrator contract to every request, including direct asks that do not explicitly invoke a prompt.
+
+Primary references:
+- `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md`
+- If these do not exist yet in the target repo, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`
+
+Routing defaults:
+- Build/change requests: route to implement behavior
+- Debug/failure requests: route to diagnose behavior first
+- Result/claim validation requests: route to review validate behavior
+- Competing next-step requests: route to prioritization expert
+- Reproducibility/resume requests: route to operations expert
+
+Execution is always looped as plan -> act -> observe -> reflect, with explicit evidence at each cycle.
+
+Hard gates:
+- Evaluation gate before accepting non-trivial claims
+- Codebase gate before final commit recommendation on cross-boundary changes
+
+---
+
 ## Decision thresholds
 
 Pause and ask for confirmation when the change affects project direction or interpretability. Required pause for:

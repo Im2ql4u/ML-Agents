@@ -2,6 +2,17 @@
 
 > **How to use:** `@review.md — debug: [error]` / `@review.md — validate: [result or claim]` / `@review.md — full: [scope]`
 
+## Execution kernel and orchestration compliance
+
+Follow `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when present. If absent, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`.
+
+In all review modes, enforce these gates before accepting conclusions:
+- Evidence gate: every claim must have explicit supporting check output
+- Intent-match gate: code/result behavior must match stated intent
+- Evaluation gate: non-trivial claims must be scored by evaluation criteria
+
+When review touches cross-module boundaries or non-local refactors, route to codebase expert before recommending final commit.
+
 ---
 
 ## Mode: Debug

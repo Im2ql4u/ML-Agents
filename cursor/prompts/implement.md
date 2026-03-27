@@ -6,42 +6,45 @@
 
 ## Precondition
 
-A plan exists and has been confirmed. The objective, architecture, training design, and evaluation protocol are specified. If they are not, use `@plan.md` first.
+A plan exists and has been confirmed. The objective, architecture, training design, and evaluation protocol are specified. If they are not, use your editor's built-in planner first and confirm the plan before implementation.
+
+## Execution kernel and orchestration compliance
+
+This prompt must follow `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when present. If absent, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`.
+
+For every implementation cycle:
+- Plan: define one atomic change unit and one acceptance check
+- Act: apply only that unit
+- Observe: run the smallest relevant check and inspect diff quality
+- Reflect: continue, retry with a smaller unit, split work, or escalate
+
+Escalate by trigger:
+- Repeated failure on same symptom: route to diagnose
+- Non-trivial claim pending acceptance: route to evaluation expert
+- Cross-boundary structural impact: route to codebase expert
 
 ---
 
-## Phase 1 — Before writing any code
+## Phase 1 — Plan contract and scope lock
 
-### Read the plan and existing codebase
+Read the confirmed plan in full and extract a short implementation contract before writing code:
 
-Read the confirmed plan in full. Then read:
-- `DECISIONS.md` — active constraints
-- All relevant files in `src/` and `core/` — what exists, what can be reused, what must be extended vs. built new
+- **Scope in** — what this implementation is allowed to change
+- **Scope out** — what is explicitly not part of this implementation
+- **Acceptance checks** — exact verification criteria from the plan
+- **Required artifacts** — files, tests, outputs, and logs that must exist
 
-Search the codebase for anything that does what you need before writing new code. Reuse and extend. Do not duplicate.
+Use the session-open and plan context as authoritative. Do not re-run broad repo re-grounding unless blocked by missing information.
 
-### Explain what you are about to build
+If any plan step is ambiguous, ask one focused clarification question, then proceed.
 
-Before writing any non-trivial module or function, state in plain language:
+### Foundation checks from the plan
 
-- What this component does — its purpose, not its implementation
-- How it fits into the overall plan
-- What it assumes about its inputs
-- What its output will be used for
+Execute the plan's required foundation checks first (data, implementation, baseline) before introducing new modeling code. If a required foundation check fails, fix or report it before continuing.
 
-Then ask: *"Does that match your understanding of what this should do?"*
+### Scope discipline
 
-Wait for confirmation before writing. If the answer reveals a mismatch, resolve it first. This step costs thirty seconds and can save hours.
-
-### Foundation check
-
-Before building anything new, verify that the foundation beneath it is solid:
-
-- Run a quick check on the data pipeline: does it produce the expected output on a known input?
-- Confirm the baseline is implemented and its result is recorded
-- Confirm existing components that will be called by the new code are working correctly
-
-If any of these fail, fix them before proceeding. Do not build on an unverified foundation.
+Implement the intent of the approved plan, not just literal wording. Do not "optimize for good-looking results" by bypassing constraints, skipping checks, or narrowing evaluation.
 
 ---
 
@@ -77,13 +80,27 @@ if torch.isnan(loss):
 
 Do not introduce a new library without flagging it, explaining why the existing stack does not suffice, and waiting for acknowledgment.
 
+### Anti-cheating rules
+
+- No label leakage or test-set peeking
+- No metric gaming (for example: changing evaluation logic to inflate reported gains)
+- No silent architecture simplification to make results easier
+- No skipping required verification steps even if intermediate output "looks good"
+
 ---
 
-## Phase 3 — At decision points and workarounds — stop
+## Phase 3 — Deviation and workaround protocol
 
-### Decision points
+### Minor vs. material deviations
 
-When facing a genuine choice between two reasonable options:
+If implementation reality diverges from the approved plan:
+
+- **Minor deviation** (naming, local refactor, mechanical wiring): proceed, but log it in the final report.
+- **Material deviation** (architecture, evaluation protocol, data split logic, dependency stack, objective semantics): stop and ask for confirmation before proceeding.
+
+### Decision points (material only)
+
+When a material choice exists between two reasonable options:
 
 1. Stop
 2. State what the decision is
@@ -91,18 +108,29 @@ When facing a genuine choice between two reasonable options:
 4. State your recommendation and the specific reason
 5. Ask what the human thinks
 
-Do not silently choose. The human must understand why the code is the way it is, not just that it exists.
+Do not silently choose material direction changes.
 
 ### Workarounds
 
-When a proper solution requires more work than the current step allows:
+When a proper fix cannot be completed within the current step:
 
 1. Stop
 2. Explain what was found and why the proper solution is not being used now
 3. State what the proper solution would be
-4. Ask: proceed with the workaround, or fix the underlying problem first?
+4. State impact on plan validity and result interpretation
+5. Ask: proceed with the workaround, or fix the underlying problem first?
 
 Do not log silently and continue.
+
+### Blocker handling
+
+If blocked after reasonable attempts, report clearly:
+
+- What is blocked
+- What was tried
+- Why it failed
+- What evidence was gathered
+- The smallest viable next options
 
 ---
 
@@ -142,6 +170,12 @@ tmux attach -t run_name
 
 Log GPU utilization and memory at regular intervals during training. Use `torch.cuda.memory_allocated()` or a periodic `nvidia-smi` call in the training loop.
 
+For long runs, require interruption-safe execution:
+
+- Save checkpoints periodically and on graceful shutdown
+- Persist run state (epoch/step/seed/config hash) so reruns can resume cleanly
+- Use append-only logs so progress is not lost if interrupted
+
 ---
 
 ## Phase 5 — Git during implementation
@@ -172,6 +206,8 @@ For every new module in `src/` or `core/`:
 - At least one test against a known-answer case. Not "does it run" — does it compute the right thing.
 - For mathematical functions: test against an analytical result or a known limiting case.
 - For data processing functions: test shapes, dtypes, value ranges, and at least one specific known value.
+- At least one integration check to confirm wiring with the existing pipeline.
+- End-to-end smoke test for the planned path before declaring completion.
 - Tests in `tests/`, runnable with `pytest -v`.
 
 Write the test before or immediately after writing the function. Not at the end.
@@ -251,6 +287,12 @@ What are the weakest points? What is the most likely methodological concern?>
 
 ### Active workarounds
 <Any TODOs introduced, with their TODO references.>
+
+### Plan contract status
+<Which planned steps are complete, partially complete, or deferred.>
+
+### Deviations from plan
+<Minor deviations taken, and any material deviations explicitly approved.>
 
 ### Output location
 results/<dated-folder>/
