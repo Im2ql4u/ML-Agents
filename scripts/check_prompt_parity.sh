@@ -10,7 +10,6 @@ PAIRS=(
   "cursor/prompts/session-open.md:vscode/prompts/session-open.prompt.md"
   "cursor/prompts/session-close.md:vscode/prompts/session-close.prompt.md"
   "cursor/prompts/brainstorm.md:vscode/prompts/brainstorm.prompt.md"
-  "cursor/prompts/plan.md:vscode/prompts/plan.prompt.md"
   "cursor/prompts/implement.md:vscode/prompts/implement.prompt.md"
   "cursor/prompts/review.md:vscode/prompts/review.prompt.md"
   "cursor/prompts/diagnose.md:vscode/prompts/diagnose.prompt.md"
@@ -19,6 +18,10 @@ PAIRS=(
   "cursor/prompts/experts/framing.md:vscode/prompts/experts/framing.prompt.md"
   "cursor/prompts/experts/training.md:vscode/prompts/experts/training.prompt.md"
   "cursor/prompts/experts/data.md:vscode/prompts/experts/data.prompt.md"
+  "cursor/prompts/experts/evaluation.md:vscode/prompts/experts/evaluation.prompt.md"
+  "cursor/prompts/experts/codebase.md:vscode/prompts/experts/codebase.prompt.md"
+  "cursor/prompts/experts/prioritization.md:vscode/prompts/experts/prioritization.prompt.md"
+  "cursor/prompts/experts/operations.md:vscode/prompts/experts/operations.prompt.md"
   "cursor/rules/core.mdc:vscode/copilot-instructions.md"
 )
 

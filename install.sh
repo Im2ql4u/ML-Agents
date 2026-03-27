@@ -183,6 +183,14 @@ case "$EDITOR_CHOICE" in
 esac
 
 # ---------------------------------------------------------------------------
+# Install shared orchestration artifacts
+# ---------------------------------------------------------------------------
+header "Shared orchestration artifacts"
+install_file "EXECUTION_KERNEL.md" ".agentic/EXECUTION_KERNEL.md"
+install_file "core/orchestrator.md" ".agentic/core/orchestrator.md"
+install_file "tools/INTERFACES.md" ".agentic/tools/INTERFACES.md"
+
+# ---------------------------------------------------------------------------
 # Install Cursor files
 # ---------------------------------------------------------------------------
 if [[ "$INSTALL_CURSOR" == true ]]; then
@@ -190,12 +198,12 @@ if [[ "$INSTALL_CURSOR" == true ]]; then
   install_file "cursor/rules/core.mdc" ".cursor/rules/core.mdc"
 
   header "Cursor — prompts"
-  for prompt in session-open session-close brainstorm plan implement review diagnose explain; do
+  for prompt in session-open session-close brainstorm implement review diagnose explain; do
     install_file "cursor/prompts/${prompt}.md" ".cursor/prompts/${prompt}.md"
   done
 
   header "Cursor — expert prompts"
-  for expert in architecture framing training data; do
+  for expert in architecture framing training data evaluation codebase prioritization operations; do
     install_file "cursor/prompts/experts/${expert}.md" ".cursor/prompts/experts/${expert}.md"
   done
 fi
@@ -208,12 +216,12 @@ if [[ "$INSTALL_VSCODE" == true ]]; then
   install_file "vscode/copilot-instructions.md" ".github/copilot-instructions.md"
 
   header "VS Code — prompts"
-  for prompt in session-open session-close brainstorm plan implement review diagnose explain; do
+  for prompt in session-open session-close brainstorm implement review diagnose explain; do
     install_file "vscode/prompts/${prompt}.prompt.md" ".github/prompts/${prompt}.prompt.md"
   done
 
   header "VS Code — expert prompts"
-  for expert in architecture framing training data; do
+  for expert in architecture framing training data evaluation codebase prioritization operations; do
     install_file "vscode/prompts/experts/${expert}.prompt.md" ".github/prompts/experts/${expert}.prompt.md"
   done
 fi

@@ -42,6 +42,7 @@ The installer will ask whether you want Cursor, VS Code, or both.
 
 **What it does:**
 - Installs prompt and rules files into `.cursor/` and/or `.github/`
+- Installs shared orchestration contracts into `.agentic/` (`EXECUTION_KERNEL`, `orchestrator`, `tool interfaces`)
 - Installs log templates (`SESSION_LOG.md`, `DECISIONS.md`, `JOURNAL.md`, `ARCHIVE.md`) if they do not already exist
 - If any file it would install already exists in your repo, it **moves your existing file** to `.agentic-backup/YYYY-MM-DD_HH-MM/` before installing — nothing is ever deleted
 - Adds `.agentic-backup/` to `.gitignore` automatically
@@ -94,6 +95,12 @@ Exit code:
 **Cursor:**
 ```
 your-project/
+├── .agentic/
+│   ├── EXECUTION_KERNEL.md
+│   ├── core/
+│   │   └── orchestrator.md
+│   └── tools/
+│       └── INTERFACES.md
 ├── .cursor/
 │   ├── rules/
 │   │   └── core.mdc                    ← always active
@@ -101,7 +108,6 @@ your-project/
 │       ├── session-open.md
 │       ├── session-close.md
 │       ├── brainstorm.md
-│       ├── plan.md
 │       ├── implement.md
 │       ├── review.md
 │       ├── diagnose.md
@@ -110,7 +116,11 @@ your-project/
 │           ├── architecture.md
 │           ├── framing.md
 │           ├── training.md
-│           └── data.md
+│           ├── data.md
+│           ├── evaluation.md
+│           ├── codebase.md
+│           ├── prioritization.md
+│           └── operations.md
 ├── SESSION_LOG.md
 ├── DECISIONS.md
 ├── JOURNAL.md
@@ -120,13 +130,18 @@ your-project/
 **VS Code:**
 ```
 your-project/
+├── .agentic/
+│   ├── EXECUTION_KERNEL.md
+│   ├── core/
+│   │   └── orchestrator.md
+│   └── tools/
+│       └── INTERFACES.md
 ├── .github/
 │   ├── copilot-instructions.md         ← always active
 │   └── prompts/
 │       ├── session-open.prompt.md
 │       ├── session-close.prompt.md
 │       ├── brainstorm.prompt.md
-│       ├── plan.prompt.md
 │       ├── implement.prompt.md
 │       ├── review.prompt.md
 │       ├── diagnose.prompt.md
@@ -135,7 +150,11 @@ your-project/
 │           ├── architecture.prompt.md
 │           ├── framing.prompt.md
 │           ├── training.prompt.md
-│           └── data.prompt.md
+│           ├── data.prompt.md
+│           ├── evaluation.prompt.md
+│           ├── codebase.prompt.md
+│           ├── prioritization.prompt.md
+│           └── operations.prompt.md
 ├── SESSION_LOG.md
 ├── DECISIONS.md
 ├── JOURNAL.md
@@ -151,7 +170,6 @@ your-project/
 | `session-open` | Start of every session. Reads logs, reports state, asks what we're doing. |
 | `session-close` | End of every session. Reflection questions, digest, archive, log reset. |
 | `brainstorm` | Thinking through a problem, direction, or idea. Adaptive — works with formed views or blank slates. |
-| `plan` | After direction is established. Produces a full engineering specification. Use in Plan Mode. |
 | `implement` | Implementation with stopping points, honest result examination, and chat summary. |
 | `review` | Three modes: `debug` (diagnose errors), `validate` (adversarial result review), `full` (complete review). |
 | `diagnose` | When something is not working. Goes bottom-up through the stack. Never suggests surface fixes first. |
@@ -160,6 +178,64 @@ your-project/
 | `experts/framing` | Problem reframing — is this the right task, is there a better decomposition? |
 | `experts/training` | Training design — baselines, loss functions, dynamics monitoring, convergence diagnosis. |
 | `experts/data` | Data pipelines — splits for correlated data, missing data, normalization, multi-source combination. |
+| `experts/evaluation` | Evaluation integrity gate — validates claim trustworthiness and returns ship/iterate/rollback. |
+| `experts/codebase` | Codebase quality gate — boundary/debt checks and safe sequencing before commit. |
+| `experts/prioritization` | Prioritization gate — ranks next actions by impact, confidence, effort, and risk. |
+| `experts/operations` | Operations gate — run reproducibility, resume safety, and environment health checks. |
+
+---
+
+## End-to-end behavior walkthrough
+
+The orchestration layer is always-on. You do not need to remember extra commands for it.
+
+### Example 1 — direct build request
+
+User request:
+```text
+"Implement feature X in module Y and keep tests green."
+```
+
+Expected behavior:
+1. Router classifies this as a build/change task.
+2. Execution flows through implement behavior.
+3. Agent runs atomic plan -> act -> observe -> reflect cycles.
+4. Each cycle produces evidence (small relevant check output).
+5. If changes cross boundaries, codebase expert gate runs before final commit recommendation.
+
+### Example 2 — direct failure/debug request
+
+User request:
+```text
+"Training loss goes to NaN after epoch 3."
+```
+
+Expected behavior:
+1. Router classifies this as debug/failure.
+2. Execution starts in diagnose behavior first.
+3. Diagnosis follows bottom-up hierarchy before suggesting tuning.
+4. If root cause fix introduces structural risk, codebase gate is invoked.
+5. If fix claim is non-trivial, evaluation gate checks trustworthiness before acceptance.
+
+### Example 3 — direct validation/trust request
+
+User request:
+```text
+"Can we trust this +3.2% improvement over baseline?"
+```
+
+Expected behavior:
+1. Router classifies this as validate/claim.
+2. Execution starts in review validate behavior.
+3. Evaluation expert scores risk, claim validity, and uncertainty.
+4. Output returns explicit decision: ship, iterate, or rollback.
+
+### What "seamless" means operationally
+
+- Direct asks and prompt-invoked flows use the same kernel and orchestrator contracts.
+- Experts are invoked by trigger conditions, not by role theater.
+- Every meaningful claim carries evidence and explicit uncertainty.
+- Escalation is automatic when retries fail or integrity risk is detected.
 
 ---
 
@@ -173,12 +249,12 @@ If the installer finds a file in your repo that conflicts with one it wants to i
 
 To review what changed:
 ```bash
-diff .agentic-backup/YYYY-MM-DD_HH-MM/.cursor/prompts/plan.md .cursor/prompts/plan.md
+diff .agentic-backup/YYYY-MM-DD_HH-MM/.cursor/prompts/implement.md .cursor/prompts/implement.md
 ```
 
 To restore your original:
 ```bash
-cp .agentic-backup/YYYY-MM-DD_HH-MM/.cursor/prompts/plan.md .cursor/prompts/plan.md
+cp .agentic-backup/YYYY-MM-DD_HH-MM/.cursor/prompts/implement.md .cursor/prompts/implement.md
 ```
 
 ---
