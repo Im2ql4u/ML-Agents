@@ -48,6 +48,7 @@ Read:
 - `DECISIONS.md` — latest 1–2 entries
 - `JOURNAL.md` — latest 1–2 entries
 - `ARCHIVE.md` — latest entry only
+- Latest plan file under `plans/` if present
 - `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` — if present; otherwise `EXECUTION_KERNEL.md` and `core/orchestrator.md` if present
 
 Note missing files.
@@ -72,6 +73,10 @@ Report on:
 **Foundation status for this task** — what is verified vs assumed (data/splits/baseline/implementation) for the exact area we are touching
 
 **Risk to this task** — what could invalidate this work if wrong
+
+**Negative-history check** — what prior failed or inconclusive attempts are relevant from `JOURNAL.md`, and what this session must avoid repeating
+
+**Comparison opportunity** — if 2+ recent experiment entries target the same question, note that a comparison entry should be produced at close
 
 **Immediate next step** — the smallest concrete action to start implementation safely
 
@@ -98,6 +103,7 @@ Read these files in full if they exist. Note any that are missing.
 - `DECISIONS.md` — full file
 - `JOURNAL.md` — full file
 - `ARCHIVE.md` — last 3 entries only
+- Latest plan file under `plans/` if present
 - `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` — if present; otherwise `EXECUTION_KERNEL.md` and `core/orchestrator.md` if present
 
 ### Step 2 — Read the repo
@@ -129,6 +135,10 @@ State what is verified and what is assumed. Do not conflate them.
 **Honest assessment** — does the current direction make sense? Are there things in the logs that look suspicious, inconsistent, or worth questioning before we proceed? Say so if there are. Do not just report what looks good.
 
 **Open questions** — unresolved things that need a decision before proceeding
+
+**Negative-history check** — relevant failed/inconclusive attempts and their implications for today's plan
+
+**Comparison opportunity** — whether current and prior experiments should be summarized as a comparison entry at close
 
 ### Step 4 — Ask two things
 

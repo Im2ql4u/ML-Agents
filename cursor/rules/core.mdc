@@ -126,6 +126,10 @@ Ask the human what they expect the next step to produce, or how they would descr
   - Contradiction with prior session conclusions
   - Context freshness is stale or unknown
 
+Close-mode selection rule:
+- At session close, evaluate the session first (experiment run, architecture/method decision, workaround change, unresolved uncertainty).
+- If any are true, use Full Close; otherwise Quick Close.
+
 ---
 
 ## Universal routing and orchestration
@@ -142,6 +146,12 @@ Routing defaults:
 - Result/claim validation requests: route to review validate behavior
 - Competing next-step requests: route to prioritization expert
 - Reproducibility/resume requests: route to operations expert
+
+Build intent handling:
+- If the user asks to build, treat this as implement-mode execution with explicit evidence.
+- Run the configured build task/command inside the implement loop and report outcome.
+- If build fails, stay in diagnose/implement loop until root cause and next action are clear.
+- Note: pressing the editor Build button without a chat request does not invoke prompt logic by itself.
 
 Execution is always looped as plan -> act -> observe -> reflect, with explicit evidence at each cycle.
 
@@ -215,6 +225,7 @@ Then write the full log entries separately.
 - All reusable logic in `src/` or `core/`. Scripts in `scripts/` are thin wrappers.
 - One script per well-defined task. Named for what it does, not when it was written.
 - Config in config files. Every run reproducible from commit hash + config file.
+- Plans in `plans/YYYY-MM-DD_<short-descriptor>.md` for non-trivial work; keep `## Current State` updated during implementation.
 - Results in `results/` with dated subdirectories. One run, one folder. Never overwrite.
 - Do not touch `README.md` unless asked.
 

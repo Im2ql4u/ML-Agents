@@ -9,6 +9,23 @@ Purpose: define stable, practical interfaces for reusable agent capabilities.
 - Tools report uncertainty and failure reasons directly.
 - Tools do not make product decisions; experts/modes do.
 
+## Dispatch Convention
+
+These interfaces are behavior contracts, not direct API endpoints.
+
+They must be mapped to editor-native capabilities (search, file edit, task/test run, diff inspection, etc.) while preserving the same input/output semantics.
+
+Whenever a tool contract is invoked in prompt-driven execution, report it in this compact form:
+
+```
+Tool: <name>
+Input: <key fields>
+Action: <what was executed via editor-native tools>
+Output: <structured result using this interface schema>
+```
+
+If an expected output field is unavailable, set it to `unknown` and state why.
+
 ## navigate
 
 Input:

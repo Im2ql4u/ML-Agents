@@ -13,7 +13,16 @@ ${input:task:Describe the task to implement. A confirmed plan should already exi
 
 ## Precondition
 
-A plan exists and has been confirmed. The objective, architecture, training design, and evaluation protocol are specified. If they are not, use your editor's built-in planner first and confirm the plan before implementation.
+A plan file exists and has been confirmed. The objective, architecture, training design, and evaluation protocol are specified. If they are not, run `@plan.md` first and confirm the plan before implementation.
+
+Plan artifact convention:
+- `plans/YYYY-MM-DD_<short-descriptor>.md`
+
+At implementation start, identify and state the exact plan file path being executed.
+
+Tool interface convention:
+- Use `tools/INTERFACES.md` as the dispatch contract for navigation, atomic edits, checks, intent verification, risk evaluation, and prioritization.
+- Treat these interfaces as behavior contracts mapped onto editor-native capabilities.
 
 ## Execution kernel and orchestration compliance
 
@@ -24,6 +33,8 @@ For every implementation cycle:
 - Act: apply only that unit
 - Observe: run the smallest relevant check and inspect diff quality
 - Reflect: continue, retry with a smaller unit, split work, or escalate
+
+After each cycle, update the active plan file `## Current State` so interrupted sessions can resume without reconstructing context.
 
 Escalate by trigger:
 - Repeated failure on same symptom: route to diagnose
@@ -40,6 +51,13 @@ Read the confirmed plan in full and extract a short implementation contract befo
 - **Scope out** — what is explicitly not part of this implementation
 - **Acceptance checks** — exact verification criteria from the plan
 - **Required artifacts** — files, tests, outputs, and logs that must exist
+
+Initialize the plan's `## Current State` section before first code change:
+- **Active step**
+- **Last evidence**
+- **Current risk**
+- **Next action**
+- **Blockers**
 
 Use the session-open and plan context as authoritative. Do not re-run broad repo re-grounding unless blocked by missing information.
 
@@ -138,6 +156,8 @@ If blocked after reasonable attempts, report clearly:
 - Why it failed
 - What evidence was gathered
 - The smallest viable next options
+
+Update `## Current State` with blocker status before pausing.
 
 ---
 
@@ -301,6 +321,9 @@ What are the weakest points? What is the most likely methodological concern?>
 ### Deviations from plan
 <Minor deviations taken, and any material deviations explicitly approved.>
 
+### Plan state update
+<What was written to `## Current State` and why.>
+
 ### Output location
 results/<dated-folder>/
 
@@ -351,3 +374,5 @@ to increase confidence that it actually is.>
 if you have been following along. Not "any questions?" — something concrete,
 answerable, that tests understanding of what was built and why.>
 ```
+
+6. Plan `Status` and `## Current State` updated for handoff

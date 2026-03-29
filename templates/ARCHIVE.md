@@ -14,6 +14,12 @@ Read the last 2–3 entries during session open. Read the full file only when re
 ### Technical summary
 [what was done, what was concluded, what is open]
 
+### Session metrics
+- Steps completed: <n of m planned>
+- Material deviations: <count>
+- Evaluation gates triggered: <count + verdict>
+- Unresolved uncertainties: <count>
+
 ### Human reflection
 **Understood this session:** ...
 **Still unclear:** ...

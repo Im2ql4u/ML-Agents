@@ -21,6 +21,14 @@ Apply `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when pr
 
 During diagnosis cycles, use plan -> act -> observe -> reflect with the smallest possible checks. If diagnosis identifies claim-integrity uncertainty, escalate to evaluation expert. If diagnosis identifies boundary/debt risk in proposed fixes, escalate to codebase expert.
 
+Maintain a compact hypothesis ledger while diagnosing:
+- Hypothesis
+- Layer
+- Evidence for
+- Evidence against
+- Single falsification check
+- Status: open | ruled_out | supported
+
 ---
 
 ## Step 1 — Characterize the failure honestly
@@ -99,6 +107,8 @@ Given the investigation:
 - What evidence supports it?
 - What evidence would falsify it — what single check would confirm or rule out this hypothesis?
 
+If more than one plausible hypothesis remains, list the top two and prioritize by expected information gain from the next check.
+
 Do not state a diagnosis with false confidence. If you are uncertain between two layers, say so and explain how to determine which one it is.
 
 ---
@@ -124,3 +134,7 @@ Given everything above, what is the single most informative check to run right n
 State it specifically. Not "check the data" — *"run the pipeline on sample X and verify the output matches expected value Y."*
 
 Wait for results before proposing anything further.
+
+After results arrive, update the hypothesis ledger and either:
+- Close the active hypothesis as ruled out/supported, or
+- Split it into narrower hypotheses if it was too broad

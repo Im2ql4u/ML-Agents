@@ -17,14 +17,16 @@ Close the session properly.
 
 ## Step 0 — Choose close mode (default is Quick Close)
 
-Use **Quick Close** by default.
+Choose mode by evaluating the session, not by habit.
 
-Switch to **Full Close** if any are true:
+Use **Full Close** if any are true:
 
 - An experiment was run
 - A genuine architectural or methodological decision was made
 - A workaround was introduced or changed
 - There is unresolved uncertainty that could mislead next session
+
+If none are true, use **Quick Close**.
 
 If uncertain, choose Full Close.
 
@@ -56,6 +58,12 @@ Append:
 **Carry forward:** <answer 1>
 **Still uncertain:** <answer 2>
 
+### Session metrics
+- Steps completed: <n of m planned>
+- Material deviations: <count>
+- Evaluation gates triggered: <count + verdict>
+- Unresolved uncertainties: <count>
+
 ---
 ```
 
@@ -70,6 +78,7 @@ Last session: [YYYY-MM-DD] — <title>
 See ARCHIVE.md for full history.
 
 ## Next session
+**Active plan file:** <plans/YYYY-MM-DD_<descriptor>.md or none>
 **Recommended starting point:** <from summary>
 **Open questions:** <from summary>
 **Unverified assumptions:** <anything assumed but not checked>
@@ -77,6 +86,12 @@ See ARCHIVE.md for full history.
 **Foundation status:** <brief: what is verified, what is assumed>
 **Context freshness:** fresh / stale / unknown
 **Contradiction flags:** none / <short note if current conclusions conflict with prior logs>
+
+## Session metrics (latest)
+**Steps completed:** <n of m planned>
+**Material deviations:** <count>
+**Evaluation gates triggered:** <count + verdict>
+**Unresolved uncertainties:** <count>
 ```
 
 ### Step 4 — Report in chat
@@ -186,6 +201,10 @@ Only if an experiment was run:
 **Next question:** <what this makes us want to investigate>
 ```
 
+If the experiment failed, was blocked, or was inconclusive, use the NEGATIVE format in `JOURNAL.md` instead of forcing a positive-result narrative.
+
+If 2+ experiment entries address the same question, add a comparison entry using the `## Comparison` template from `JOURNAL.md`.
+
 If JOURNAL.md exceeds 8 entries, compress the oldest 4 into `## Earlier Experiments`.
 
 ---
@@ -201,6 +220,7 @@ Last session: [YYYY-MM-DD] — <title>
 See ARCHIVE.md for full history.
 
 ## Next session
+**Active plan file:** <plans/YYYY-MM-DD_<descriptor>.md or none>
 **Recommended starting point:** <from digest>
 **Open questions:** <from digest>
 **Unverified assumptions:** <anything assumed but not checked>
@@ -208,6 +228,12 @@ See ARCHIVE.md for full history.
 **Foundation status:** <brief: what is verified, what is assumed>
 **Context freshness:** fresh / stale / unknown
 **Contradiction flags:** none / <short note if current conclusions conflict with prior logs>
+
+## Session metrics (latest)
+**Steps completed:** <n of m planned>
+**Material deviations:** <count>
+**Evaluation gates triggered:** <count + verdict>
+**Unresolved uncertainties:** <count>
 ```
 
 ---
@@ -228,4 +254,10 @@ Key things carried forward:
 - <most important open question>
 - <active workarounds>
 - <what is still unverified>
+
+Session metrics:
+- Steps completed: <n of m planned>
+- Material deviations: <count>
+- Evaluation gates triggered: <count + verdict>
+- Unresolved uncertainties: <count>
 ```
