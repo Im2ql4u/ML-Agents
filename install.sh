@@ -198,7 +198,7 @@ if [[ "$INSTALL_CURSOR" == true ]]; then
   install_file "cursor/rules/core.mdc" ".cursor/rules/core.mdc"
 
   header "Cursor — prompts"
-  for prompt in session-open session-close brainstorm implement review diagnose explain; do
+  for prompt in session-open session-close plan brainstorm implement review diagnose explain; do
     install_file "cursor/prompts/${prompt}.md" ".cursor/prompts/${prompt}.md"
   done
 
@@ -216,7 +216,7 @@ if [[ "$INSTALL_VSCODE" == true ]]; then
   install_file "vscode/copilot-instructions.md" ".github/copilot-instructions.md"
 
   header "VS Code — prompts"
-  for prompt in session-open session-close brainstorm implement review diagnose explain; do
+  for prompt in session-open session-close plan brainstorm implement review diagnose explain; do
     install_file "vscode/prompts/${prompt}.prompt.md" ".github/prompts/${prompt}.prompt.md"
   done
 

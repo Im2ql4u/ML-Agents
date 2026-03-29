@@ -9,6 +9,7 @@ cd "$REPO_ROOT"
 PAIRS=(
   "cursor/prompts/session-open.md:vscode/prompts/session-open.prompt.md"
   "cursor/prompts/session-close.md:vscode/prompts/session-close.prompt.md"
+  "cursor/prompts/plan.md:vscode/prompts/plan.prompt.md"
   "cursor/prompts/brainstorm.md:vscode/prompts/brainstorm.prompt.md"
   "cursor/prompts/implement.md:vscode/prompts/implement.prompt.md"
   "cursor/prompts/review.md:vscode/prompts/review.prompt.md"
