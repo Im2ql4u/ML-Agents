@@ -88,6 +88,18 @@ Exit code:
 - `0` means all mapped pairs are aligned
 - `1` means at least one pair drifted (or a file is missing)
 
+## Prompt schema check
+
+Use this to verify required sections still exist in critical prompts:
+
+```bash
+./scripts/check_prompt_schema.sh
+```
+
+Exit code:
+- `0` means required schema sections were found
+- `1` means one or more required sections are missing
+
 ---
 
 ## File layout after install
@@ -107,6 +119,7 @@ your-project/
 │   └── prompts/
 │       ├── session-open.md
 │       ├── session-close.md
+│       ├── plan.md
 │       ├── brainstorm.md
 │       ├── implement.md
 │       ├── review.md
@@ -141,6 +154,7 @@ your-project/
 │   └── prompts/
 │       ├── session-open.prompt.md
 │       ├── session-close.prompt.md
+│       ├── plan.prompt.md
 │       ├── brainstorm.prompt.md
 │       ├── implement.prompt.md
 │       ├── review.prompt.md
@@ -158,7 +172,8 @@ your-project/
 ├── SESSION_LOG.md
 ├── DECISIONS.md
 ├── JOURNAL.md
-└── ARCHIVE.md
+├── ARCHIVE.md
+└── plans/
 ```
 
 ---
@@ -169,6 +184,7 @@ your-project/
 |--------|-------------|
 | `session-open` | Start of every session. Reads logs, reports state, asks what we're doing. |
 | `session-close` | End of every session. Reflection questions, digest, archive, log reset. |
+| `plan` | Build a detailed markdown execution plan with atomic steps and acceptance checks. |
 | `brainstorm` | Thinking through a problem, direction, or idea. Adaptive — works with formed views or blank slates. |
 | `implement` | Implementation with stopping points, honest result examination, and chat summary. |
 | `review` | Three modes: `debug` (diagnose errors), `validate` (adversarial result review), `full` (complete review). |
@@ -236,6 +252,140 @@ Expected behavior:
 - Experts are invoked by trigger conditions, not by role theater.
 - Every meaningful claim carries evidence and explicit uncertainty.
 - Escalation is automatic when retries fail or integrity risk is detected.
+
+---
+
+## Practical session flow (what you do, what the system does)
+
+This is the shortest reliable way to run a full session with the new architecture.
+
+### 1) Start with session-open
+
+You run:
+```bash
+@session-open
+```
+
+System behavior:
+- Reads logs and relevant repo context
+- Loads orchestration contracts from `.agentic/` if installed
+- Locks scope for this session before coding starts
+
+### 2) If something is unclear, brainstorm first
+
+You run:
+```bash
+@brainstorm
+```
+
+System behavior:
+- Surfaces candidate causes/options
+- Keeps focus on falsifiable checks
+- Helps choose the next atomic move
+
+### 3) Plan the strategy with built-in tools
+
+You ask naturally in chat, for example:
+```text
+"Plan a minimal-risk strategy to fix this and verify it."
+```
+
+System behavior:
+- Router classifies this as planning/strategy
+- Produces atomic steps with explicit acceptance checks
+- Selects tool-like actions (navigate, edit_atomic, test_quick, verify_intent)
+
+### 4) Implement the plan
+
+You run:
+```bash
+@implement
+```
+
+System behavior:
+- Executes plan -> act -> observe -> reflect per atomic unit
+- Runs the smallest relevant check after each unit
+- Escalates automatically when needed:
+	- repeated failure -> diagnose
+	- claim trust uncertainty -> evaluation expert
+	- cross-boundary risk -> codebase expert
+
+### 5) Review and decide
+
+You run:
+```bash
+@review -- validate: <claim>
+```
+
+System behavior:
+- Verifies evidence quality and intent match
+- Applies evaluation gate for non-trivial claims
+- Returns explicit decision: ship, iterate, or rollback
+
+### 6) Close the session
+
+You run:
+```bash
+@session-close
+```
+
+System behavior:
+- Records decisions, uncertainty, and next step
+- Archives session context cleanly for the next run
+
+---
+
+## Updating repos where you already installed ML-Agents
+
+If you installed this workflow in other repos before these changes, use one of these paths.
+
+### Option A — update one target repo (recommended)
+
+From the root of the target repo:
+```bash
+bash ~/ML-Agents/update.sh
+```
+
+What this does:
+1. Pulls latest changes in your local `~/ML-Agents` clone
+2. Re-runs installer into the current target repo
+3. Backs up replaced workflow files into `.agentic-backup/<timestamp>/`
+4. Installs new `.agentic/` contracts and new expert prompts
+5. Keeps existing log files (`SESSION_LOG.md`, `DECISIONS.md`, `JOURNAL.md`, `ARCHIVE.md`) untouched
+
+### Option B — update many previously installed repos
+
+Run this from anywhere, after editing `REPOS=(...)` to your paths:
+```bash
+REPOS=(
+	"$HOME/path/to/repo-one"
+	"$HOME/path/to/repo-two"
+	"$HOME/path/to/repo-three"
+)
+
+for repo in "${REPOS[@]}"; do
+	echo "Updating $repo"
+	(cd "$repo" && bash "$HOME/ML-Agents/update.sh")
+done
+```
+
+### After update: quick verification in each repo
+
+From each target repo root:
+```bash
+ls -R .agentic
+```
+
+You should see:
+- `.agentic/EXECUTION_KERNEL.md`
+- `.agentic/core/orchestrator.md`
+- `.agentic/tools/INTERFACES.md`
+
+And under prompts, you should now have experts for:
+- evaluation
+- codebase
+- prioritization
+- operations
 
 ---
 
