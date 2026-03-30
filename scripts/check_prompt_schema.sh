@@ -38,6 +38,9 @@ do
   check_contains "$file" "### Plan state update" "plan state update section"
   check_contains "$file" "## Phase 8 — Honest results report" "honest results report phase"
   check_contains "$file" "## Current State" "plan current state requirement"
+  check_contains "$file" "Step 1 — Sanity check run" "mandatory sanity check run"
+  check_contains "$file" "ETA for full run" "ETA estimation requirement"
+  check_contains "$file" "Checkpoint every" "checkpoint interval requirement"
 done
 
 # Diagnose prompt must include all 5 hierarchy layers and hypothesis ledger.
