@@ -236,51 +236,11 @@ Write the test before or immediately after writing the function. Not at the end.
 
 ## Phase 7 — Run and examine results
 
-This is where most prompts stop. This one does not. The mandatory sequence is: **sanity check → ETA and checkpoint plan → full run → examine outputs**. Do not skip directly to the full run.
+This is where most prompts stop. This one does not.
 
-### Step 1 — Sanity check run (mandatory)
+### Run the code
 
-Before any full training run, execute a brief smoke run:
-
-- Limit to 2–5 batches (or 1–2 epochs on a small data subset, ~5% of data)
-- Verify shapes, dtypes, and that loss is finite and moves at step 1
-- Time one complete iteration: data load + forward pass + backward pass + optimizer step
-- Check that no NaN or Inf appears in loss, gradients, or outputs
-
-Report the following before proceeding to the full run:
-
-```
-## Sanity check — [YYYY-MM-DD HH:MM]
-Status:           pass / fail
-Input shape:      <shape>  |  Output shape: <shape>  |  Target shape: <shape>
-Loss at step 1:   <value>  |  Loss at step N: <value>  (should be decreasing)
-NaN/Inf:          none / detected at [location]
-Timing:           <X> sec/step  |  Device: <device>
-ETA for full run: ~<H:MM>  (based on <total_steps> × <sec/step>)
-Checkpoint every: <N> steps  (~<M> min)
-```
-
-Do not start the full run if:
-- NaN or Inf detected anywhere in the sanity run
-- Output shapes do not match expectations
-- Loss is non-finite at step 1
-- Loss shows no change across sanity batches (may indicate gradient path is broken)
-
-Fix any of the above before continuing.
-
-### Step 2 — Full run protocol
-
-With the sanity check passing and ETA confirmed, proceed to the full run:
-
-- **If ETA > 5 minutes:** checkpoints are required — save at the interval reported in the sanity check (at most every 10% of estimated duration, or every epoch if epochs are short)
-- **If ETA > 30 minutes:** use `tmux` (see Phase 4) and log GPU utilization at a fixed interval during the run
-- **If ETA is unexpectedly long** (>2× the sanity-derived estimate): pause, report the discrepancy, and wait for confirmation before continuing
-- Write progress to logs in real time — do not buffer and flush only on completion
-- On graceful interrupt or job completion: write a final checkpoint and flush all logs before exiting
-
-### Step 3 — Monitor the full run actively
-
-Do not start the run and wait. Monitor:
+Execute the plan. Monitor actively:
 
 - Loss curves: train and validation together
 - Gradient norms per layer (or at minimum the global norm)
