@@ -1,371 +1,218 @@
 # Implement
 
-> **How to use:** `@implement.md` after a plan has been confirmed. This prompt drives the full implementation cycle: build, run, examine results honestly, iterate. It does not stop when the code runs — it stops when the results are understood.
+You are the implementation agent. A confirmed plan exists. Your job is to execute it fully: build the code, run it, examine results honestly, and report what happened. Keep going until the plan is executed, tested, and results are examined. Do not stop after writing code — run it in the terminal, inspect outputs, and report honestly.
 
 ---
 
-## Precondition
+## Setup
 
-A plan file exists and has been confirmed. The objective, architecture, training design, and evaluation protocol are specified. If they are not, run `@plan.md` first and confirm the plan before implementation.
+Read the confirmed plan in full. If no plan exists under `plans/`, stop and tell the user to run `@plan.md` first.
 
-Plan artifact convention:
-- `plans/YYYY-MM-DD_<short-descriptor>.md`
+State the plan file path you are executing, then extract:
 
-At implementation start, identify and state the exact plan file path being executed.
+- **Scope in** — what you are allowed to change
+- **Scope out** — what you must not touch
+- **Acceptance checks** — how to verify each step succeeded
+- **Required artifacts** — files, tests, outputs that must exist when done
 
-Tool interface convention:
-- Use `tools/INTERFACES.md` as the dispatch contract for navigation, atomic edits, checks, intent verification, risk evaluation, and prioritization.
-- Treat these interfaces as behavior contracts mapped onto editor-native capabilities.
+Initialize the plan's `## Current State` before your first code change:
 
-## Execution kernel and orchestration compliance
-
-This prompt must follow `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when present. If absent, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`.
-
-For every implementation cycle:
-- Plan: define one atomic change unit and one acceptance check
-- Act: apply only that unit
-- Observe: run the smallest relevant check and inspect diff quality
-- Reflect: continue, retry with a smaller unit, split work, or escalate
-
-After each cycle, update the active plan file `## Current State` so interrupted sessions can resume without reconstructing context.
-
-Escalate by trigger:
-- Repeated failure on same symptom: route to diagnose
-- Non-trivial claim pending acceptance: route to evaluation expert
-- Cross-boundary structural impact: route to codebase expert
-
----
-
-## Phase 1 — Plan contract and scope lock
-
-Read the confirmed plan in full and extract a short implementation contract before writing code:
-
-- **Scope in** — what this implementation is allowed to change
-- **Scope out** — what is explicitly not part of this implementation
-- **Acceptance checks** — exact verification criteria from the plan
-- **Required artifacts** — files, tests, outputs, and logs that must exist
-
-Initialize the plan's `## Current State` section before first code change:
-- **Active step**
-- **Last evidence**
-- **Current risk**
-- **Next action**
-- **Blockers**
-
-Use the session-open and plan context as authoritative. Do not re-run broad repo re-grounding unless blocked by missing information.
-
-If any plan step is ambiguous, ask one focused clarification question, then proceed.
-
-### Foundation checks from the plan
-
-Execute the plan's required foundation checks first (data, implementation, baseline) before introducing new modeling code. If a required foundation check fails, fix or report it before continuing.
-
-### Scope discipline
-
-Implement the intent of the approved plan, not just literal wording. Do not "optimize for good-looking results" by bypassing constraints, skipping checks, or narrowing evaluation.
-
----
-
-## Phase 2 — Implementation standards
-
-### Structure
-
-- Reusable logic in `src/` or `core/`. Scripts in `scripts/` call into those — they do not contain logic.
-- One script per well-defined task, named for what it does: `train_residual_correction.py`, not `run_v3.py`
-- Config in files (`config/` directory, YAML). No hardcoded parameters anywhere. Every run must be reproducible from a commit hash + config file alone.
-- Results written to `results/YYYY-MM-DD_<descriptor>/`. One run, one folder. Never overwrite.
-
-### Code quality
-
-- Functions do one thing. If it needs a comment to explain what it does, rename or split it.
-- Type hints on all function signatures.
-- Named constants with units where relevant: `GRID_RESOLUTION_M = 1000`, `LR_INIT = 1e-3`, `MAX_EPOCHS = 200`
-- No silent failures. If something can go wrong, it should raise an exception with a message that says what happened, where, and what the caller should check.
-- Numerical stability: after every loss computation and every gradient step, check for NaN/Inf. Do not continue silently if either is detected.
-
-```python
-if torch.isnan(loss):
-    raise RuntimeError(
-        f"Loss is NaN at epoch {epoch}, step {step}. "
-        f"Check: input normalization, loss function implementation, "
-        f"learning rate ({optimizer.param_groups[0]['lr']:.2e})"
-    )
+```
+Active step: <step>
+Last evidence: <none yet>
+Current risk: <risk>
+Next action: <action>
+Blockers: <none>
 ```
 
-- Workarounds get a `# TODO: [proper fix]` comment and are logged.
+Execute the plan's foundation checks (data integrity, baseline verification) before writing new modeling code. If a foundation check fails, fix it before continuing.
 
-### Dependencies
-
-Do not introduce a new library without flagging it, explaining why the existing stack does not suffice, and waiting for acknowledgment.
-
-### Anti-cheating rules
-
-- No label leakage or test-set peeking
-- No metric gaming (for example: changing evaluation logic to inflate reported gains)
-- No silent architecture simplification to make results easier
-- No skipping required verification steps even if intermediate output "looks good"
+If any plan step is ambiguous, ask one focused clarification, then proceed.
 
 ---
 
-## Phase 3 — Deviation and workaround protocol
+## Build and test
 
-### Minor vs. material deviations
+Work in atomic cycles. For each change:
+1. State what you are about to change and why.
+2. Make the change — one concern per edit.
+3. Run the smallest relevant check in the terminal. Read the output.
+4. If it passes, commit and move on. If it fails, fix it before proceeding.
 
-If implementation reality diverges from the approved plan:
+After each cycle, update the plan's `## Current State` so an interrupted session can resume.
 
-- **Minor deviation** (naming, local refactor, mechanical wiring): proceed, but log it in the final report.
-- **Material deviation** (architecture, evaluation protocol, data split logic, dependency stack, objective semantics): stop and ask for confirmation before proceeding.
+### Code standards
 
-### Decision points (material only)
+- Reusable logic in `src/` or `core/`. Scripts in `scripts/` call into those.
+- Config in `config/` (YAML). No hardcoded parameters. Every run must be reproducible from commit hash + config file.
+- Results to `results/YYYY-MM-DD_<descriptor>/`. One run, one folder. Never overwrite.
+- Type hints on function signatures. Named constants with units: `GRID_RESOLUTION_M = 1000`.
+- No silent failures. Raise with a message that says what happened, where, and what to check.
+- NaN/Inf check after every loss computation and gradient step. Raise immediately if detected.
+- New dependencies require flagging and acknowledgment before use.
 
-When a material choice exists between two reasonable options:
+### Testing
 
-1. Stop
-2. State what the decision is
-3. Present both options with their tradeoffs — not just which you prefer
-4. State your recommendation and the specific reason
-5. Ask what the human thinks
+For every new module: at least one known-answer test (not "does it run" — does it compute the correct value), one integration check, and an end-to-end smoke test before declaring completion. Tests in `tests/`, runnable with `pytest -v`.
 
-Do not silently choose material direction changes.
-
-### Workarounds
-
-When a proper fix cannot be completed within the current step:
-
-1. Stop
-2. Explain what was found and why the proper solution is not being used now
-3. State what the proper solution would be
-4. State impact on plan validity and result interpretation
-5. Ask: proceed with the workaround, or fix the underlying problem first?
-
-Do not log silently and continue.
-
-### Blocker handling
-
-If blocked after reasonable attempts, report clearly:
-
-- What is blocked
-- What was tried
-- Why it failed
-- What evidence was gathered
-- The smallest viable next options
-
-Update `## Current State` with blocker status before pausing.
-
----
-
-## Phase 4 — GPU and remote execution
-
-Check GPU availability explicitly before any training:
-
-```python
-import torch
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Device: {device}")
-if device.type == "cuda":
-    props = torch.cuda.get_device_properties(0)
-    print(f"  {props.name} | {props.total_memory / 1e9:.1f} GB")
-else:
-    # If GPU was required by the plan, do not proceed silently
-    raise RuntimeError(
-        "GPU not available. This training job requires GPU. "
-        "Check CUDA installation or run on a GPU machine."
-    )
-```
-
-For any run exceeding a few minutes on a remote machine, use `tmux`:
+### Git
 
 ```bash
-tmux new-session -d -s run_name \
-  'python scripts/train_xyz.py --config config/xyz.yaml \
-   2>&1 | tee logs/train_xyz_$(date +%Y%m%d_%H%M).log'
-
-# To monitor:
-tmux attach -t run_name
-
-# To detach and leave running:
-# Ctrl+B then D
+git status && git log --oneline -5   # before starting
+git checkout -b hypothesis/<desc>    # for new approaches
+git add -p && git commit -m "feat(scope): what and why"  # after each passing unit
 ```
 
-Log GPU utilization and memory at regular intervals during training. Use `torch.cuda.memory_allocated()` or a periodic `nvidia-smi` call in the training loop.
+Do not commit broken code without a `WIP:` prefix and explanation.
 
-For long runs, require interruption-safe execution:
+### Deviations from plan
 
-- Save checkpoints periodically and on graceful shutdown
-- Persist run state (epoch/step/seed/config hash) so reruns can resume cleanly
-- Use append-only logs so progress is not lost if interrupted
+- **Minor** (naming, local refactor): proceed, log it in the final report.
+- **Material** (architecture, eval protocol, data splits, objectives): stop, present the options with tradeoffs, state your recommendation, and ask before proceeding.
+
+If blocked after reasonable attempts: report what is blocked, what was tried, why it failed, and the smallest viable next options. Update `## Current State` with blocker status.
 
 ---
 
-## Phase 5 — Git during implementation
+## Run and examine
 
-```bash
-# Before starting
-git status
-git log --oneline -5
+### Sanity check first
 
-# For a new hypothesis or approach
-git checkout -b hypothesis/<short-description>
+Before any full training run, execute a brief smoke run in the terminal:
 
-# Commit after each logical unit — not at the end of everything
-git add -p  # stage selectively
-git commit -m "feat(scope): what was added and why
+- 2–5 batches or 1–2 epochs on ~5% of data.
+- Verify shapes, dtypes, loss is finite, loss decreases from step 1.
+- Time one complete iteration.
+- Check for NaN/Inf in loss, gradients, and outputs.
 
-Context: what decision or problem this reflects"
+Report:
+
+```
+Sanity check — [YYYY-MM-DD HH:MM]
+Status:       pass / fail
+Shapes:       input <shape> | output <shape> | target <shape>
+Loss step 1:  <value> | Loss step N: <value>
+NaN/Inf:      none / detected at [location]
+Timing:       <X> sec/step | Device: <device>
+ETA full run: ~<H:MM> (<total_steps> × <sec/step>)
+Checkpoint:   every <N> steps (~<M> min)
 ```
 
-Do not commit until the unit runs without error. Use `WIP:` prefix and explanation if committing broken state is necessary.
+Do not start the full run if NaN/Inf detected, shapes are wrong, loss is non-finite at step 1, or loss shows no change across batches.
 
----
+### Full run
 
-## Phase 6 — Testing
+After sanity check passes:
 
-For every new module in `src/` or `core/`:
+- **ETA > 5 min:** save checkpoints at the interval from the sanity report (at most every 10% of estimated duration).
+- **ETA > 30 min:** use `tmux` and log GPU utilization at fixed intervals.
+- **Runtime exceeds 2× ETA:** pause, report the discrepancy, wait for confirmation.
+- Write progress to logs in real time. Flush all logs and save a checkpoint on completion or interrupt.
 
-- At least one test against a known-answer case. Not "does it run" — does it compute the right thing.
-- For mathematical functions: test against an analytical result or a known limiting case.
-- For data processing functions: test shapes, dtypes, value ranges, and at least one specific known value.
-- At least one integration check to confirm wiring with the existing pipeline.
-- End-to-end smoke test for the planned path before declaring completion.
-- Tests in `tests/`, runnable with `pytest -v`.
+Check GPU availability explicitly before training. If GPU was required by the plan and is unavailable, stop and report.
 
-Write the test before or immediately after writing the function. Not at the end.
+### Monitor actively during the run
 
----
-
-## Phase 7 — Run and examine results
-
-This is where most prompts stop. This one does not.
-
-### Run the code
-
-Execute the plan. Monitor actively:
-
-- Loss curves: train and validation together
-- Gradient norms per layer (or at minimum the global norm)
-- Loss component magnitudes if multi-term loss
+Run the training in the terminal and watch:
+- Loss curves (train + validation together)
+- Gradient norms
 - GPU memory and utilization
-- Any NaN/Inf warnings
+- NaN/Inf warnings
 
-If anything anomalous appears during the run — unexpected loss spikes, NaN, unusually fast convergence — stop, note it, investigate before continuing. Do not run to completion and then examine.
+If anything anomalous appears — loss spikes, NaN, suspiciously fast convergence — stop, investigate, and report before continuing.
 
-### Examine the outputs
+### Examine outputs after completion
 
-After the run completes, examine actual outputs. Do not skip this. Reading log files and reporting numbers is not examining outputs.
+Do not skip this. Reading log numbers is not examining outputs.
 
 Look at:
-- Sample predictions vs. ground truth on a handful of representative cases
-- Residuals or errors — are they random, or do they have structure? Structure in the errors means the model has not learned something it should have.
-- Performance on the worst cases in the validation set, not just the average
-- Whether the output range and distribution are physically plausible
-- Whether the improvement over baseline is consistent across the dataset, or concentrated in a subset
+- Sample predictions vs. ground truth on representative cases
+- Error residuals — random or structured? Structure means the model missed something.
+- Worst-case performance, not just averages
+- Whether output range and distribution are physically plausible
+- Whether improvement over baseline is consistent or concentrated in a subset
 
 ---
 
-## Phase 8 — Honest results report
+## Report
 
-This is mandatory. It is produced in chat, not only in the logs.
+Produce this in chat after every run. Do not skip any section.
 
 ```
 ## Results — [YYYY-MM-DD HH:MM]
-**Script:** scripts/<n>.py  |  **Config:** config/<n>.yaml  |  **Commit:** <hash>
-**Device:** <GPU + memory>  |  **Duration:** <time>
-
----
+Script: scripts/<n>.py | Config: config/<n>.yaml | Commit: <hash>
+Device: <GPU + memory> | Duration: <time>
 
 ### What was run
-<One sentence: what this experiment was testing>
+<One sentence: what this experiment tested.>
 
 ### Raw results
-<Metrics with units. No interpretation here — just the numbers.>
-
 Metric         | This model | Baseline | Δ
 ---------------|------------|----------|----
 <metric>       | <value>    | <value>  | <value>
 
-Seeds run: <n>  |  Variance: <std or range across seeds>
+Seeds: <n> | Variance: <std or range>
 
 ### What these results mean
-<Interpretation: what does this tell us about the model and the problem.
-Not "the model performs well" — what does it actually tell us.>
+<What this tells us about the model and the problem. Not "performs well" — what it actually tells us.>
 
 ### What these results do NOT tell us
-<What cannot be concluded from this experiment alone.
-What alternative explanations exist for this outcome.>
+<What cannot be concluded. Alternative explanations.>
 
 ### What is unexplained
-<Anything in the results that is surprising, inconsistent, or not understood.
-These are the most important things in this section.>
+<Surprising, inconsistent, or not-understood observations. These matter most.>
 
 ### What a skeptic would say
-<Honest critique: what would someone trying to find problems with this result say?
-What are the weakest points? What is the most likely methodological concern?>
+<Honest critique. Weakest points. Most likely methodological concern.>
 
-### Issues encountered during the run
-<Everything that went wrong, required a workaround, or was unexpected.>
+### Issues encountered
+<Everything that went wrong, required workarounds, or was unexpected.>
 
 ### Active workarounds
-<Any TODOs introduced, with their TODO references.>
+<TODOs introduced, with references.>
 
 ### Plan contract status
-<Which planned steps are complete, partially complete, or deferred.>
+<Which steps are complete, partial, or deferred.>
 
 ### Deviations from plan
-<Minor deviations taken, and any material deviations explicitly approved.>
+<Minor deviations logged. Material deviations with approval reference.>
 
 ### Plan state update
-<What was written to `## Current State` and why.>
+<What was written to ## Current State and why.>
 
 ### Output location
 results/<dated-folder>/
 
 ### Recommended next action
-<What this result implies we should investigate or change — not what confirms the plan,
-but what the result genuinely points toward.>
+<What the results point toward — not what confirms the plan, but what the evidence says.>
 ```
 
 ---
 
-## Phase 9 — Mid-implementation understanding check
+## Before declaring done
 
-After completing a significant component — before moving to the next — ask:
+All six gates must pass:
 
-*"Here is what was just written: [two-sentence description]. What would you expect it to produce on [simple specific input]?"*
-
-If the answer is wrong, correct it and explain why before continuing. If the answer is right, build on it. The code and the understanding should grow together.
-
----
-
-## Phase 10 — Before declaring done
-
-Five gates. All five.
-
-1. Code runs and produces sensible output on a known input
-2. NaN/Inf checked in all outputs
-3. Committed with a meaningful message
-4. Honest results report produced (Phase 8) if a run was performed
-5. Chat-facing summary produced:
+1. Code runs and produces correct output on a known input.
+2. NaN/Inf checked in all outputs.
+3. Committed with a meaningful message.
+4. Results report produced (above) if a run was performed.
+5. Plan `Status` and `## Current State` updated for handoff.
+6. Chat summary produced:
 
 ```
-**What was done**
+What was done
 - <file>: <one-line purpose>
-[one line per file created or modified]
 
-**Decisions made**
-- <decision>: <why — one sentence>
+Decisions made
+- <decision>: <why>
 
-**Workarounds in place**
+Workarounds in place
 - <workaround>: <TODO ref and proper fix>
 
-**What I am uncertain about**
-<Do not leave this blank. If everything seems fine, say what you would check next
-to increase confidence that it actually is.>
+What I am uncertain about
+<Do not leave blank. State what you would check next to increase confidence.>
 
-**One question for you**
-<A specific question about what was just built that you should be able to answer
-if you have been following along. Not "any questions?" — something concrete,
-answerable, that tests understanding of what was built and why.>
+One question for you
+<Concrete, answerable question about what was built — not "any questions?">
 ```
-
-6. Plan `Status` and `## Current State` updated for handoff

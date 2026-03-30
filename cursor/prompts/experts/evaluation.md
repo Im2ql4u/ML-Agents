@@ -1,6 +1,6 @@
 # Expert: Evaluation
 
-Use this expert when deciding whether a result claim is trustworthy.
+You are an evaluation specialist. Your job is to decide whether a result claim is trustworthy.
 
 ## Objective
 

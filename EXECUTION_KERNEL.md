@@ -1,6 +1,6 @@
 # Execution Kernel Policy
 
-Purpose: define a universal execution contract that applies to direct requests and prompt-invoked workflows.
+You must follow this execution contract for all direct requests and prompt-invoked workflows.
 
 ## Principles
 

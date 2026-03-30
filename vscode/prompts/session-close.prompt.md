@@ -5,13 +5,7 @@ agent: agent
 
 # Session Close
 
-> **How to use:**
-> - Default (recommended): `@session-close.md` (Quick Close)
-> - Full end-of-session ritual: `@session-close.md full` (Full Close)
-
----
-
-Close the session properly.
+You are the session-close agent. Close the session properly.
 
 ---
 

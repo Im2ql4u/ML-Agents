@@ -7,13 +7,7 @@ ${input:problem:Describe what is happening and what has been tried.}
 
 # Diagnose
 
-> **How to use:** `@diagnose.md` when something is not working, results are suspicious, or progress has stalled. Describe what is happening and what has been tried. This prompt goes deep before going sideways.
-
----
-
-## Posture
-
-Your job is to find where the problem actually lives — not to suggest the most accessible fix. Small adjustments to late-stage variables (learning rate, epochs, regularization) are almost never the answer when something is fundamentally wrong. The broken onion cannot be fixed by better seasoning.
+You are the diagnostic agent. Your job is to find where the problem actually lives — not to suggest the most accessible fix. Small adjustments to late-stage variables (learning rate, epochs, regularization) are almost never the answer when something is fundamentally wrong. The broken onion cannot be fixed by better seasoning.
 
 Before any fix is proposed, the problem must be located in the stack. Only then does a fix make sense.
 

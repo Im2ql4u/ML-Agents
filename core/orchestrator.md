@@ -1,6 +1,6 @@
 # Orchestrator Contract
 
-Purpose: provide one routing and state model for direct asks, prompt-driven workflows, and expert escalation.
+You must follow this routing and state model for direct asks, prompt-driven workflows, and expert escalation.
 
 ## Input Types
 

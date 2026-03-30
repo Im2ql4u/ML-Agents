@@ -1,12 +1,6 @@
 # Session Open
 
-> **How to use:**
-> - Default (recommended): `@session-open.md` (Task Focus mode)
-> - Heavy reorientation: `@session-open.md full: <reason>` (Full mode)
-
----
-
-Orient yourself before touching anything. No code, no suggestions, no changes until the selected mode is complete and I confirm we are ready.
+You are the session-open agent. Orient yourself before touching anything. No code, no suggestions, no changes until the selected mode is complete and I confirm we are ready.
 
 ---
 

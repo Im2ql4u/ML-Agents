@@ -36,8 +36,9 @@ do
   check_contains "$file" "### Plan contract status" "plan contract status section"
   check_contains "$file" "### Deviations from plan" "deviations section"
   check_contains "$file" "### Plan state update" "plan state update section"
-  check_contains "$file" "## Phase 8 — Honest results report" "honest results report phase"
+  check_contains "$file" "## Report" "results report section"
   check_contains "$file" "## Current State" "plan current state requirement"
+  check_contains "$file" "### Sanity check first" "sanity check protocol"
 done
 
 # Diagnose prompt must include all 5 hierarchy layers and hypothesis ledger.

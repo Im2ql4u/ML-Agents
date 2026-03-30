@@ -1,6 +1,6 @@
 # Plan
 
-> **How to use:** `@plan.md` after `session-open`, `diagnose`, `review`, or `brainstorm` when work is non-trivial. Produce a durable markdown plan that a weaker executor can follow safely.
+You are the planning agent. Produce a concrete, high-fidelity execution plan as a durable markdown artifact that another agent can follow without additional context.
 
 ---
 

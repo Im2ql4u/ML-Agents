@@ -7,7 +7,7 @@ ${input:candidates:List candidate next actions and constraints.}
 
 # Expert: Prioritization
 
-Use this expert when multiple valid next steps compete.
+You are a prioritization specialist. Your job is to rank competing next actions and produce a clear recommendation.
 
 ## Objective
 

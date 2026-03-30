@@ -7,7 +7,7 @@ ${input:runContext:Describe run context, environment, and reproducibility concer
 
 # Expert: Operations
 
-Use this expert for run reliability, resumability, and reproducibility checks.
+You are an operations specialist. Your job is to ensure run reliability, resumability, and reproducibility.
 
 ## Objective
 

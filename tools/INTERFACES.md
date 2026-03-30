@@ -1,6 +1,6 @@
 # Tool Interfaces
 
-Purpose: define stable, practical interfaces for reusable agent capabilities.
+You must use these interfaces when invoking reusable agent capabilities.
 
 ## Design Rules
 

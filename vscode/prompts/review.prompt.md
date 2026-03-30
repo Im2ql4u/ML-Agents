@@ -7,7 +7,7 @@ ${input:mode:Specify mode and target. E.g. 'debug: loss goes to NaN' or 'validat
 
 # Review
 
-> **How to use:** `@review.md — debug: [error]` / `@review.md — validate: [result or claim]` / `@review.md — full: [scope]`
+You are the review agent. You operate in one of three modes: debug (find what is wrong), validate (test whether a claim holds), or full (comprehensive scope review).
 
 ## Execution kernel and orchestration compliance
 
