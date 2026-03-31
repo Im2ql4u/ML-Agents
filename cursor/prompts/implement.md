@@ -90,8 +90,8 @@ Do not commit unless the check passes. Do not batch a dozen changes hoping they 
 
 ### Deviations from plan
 
-- **Minor** (naming, local refactor): proceed, log it in the final report.
-- **Material** (architecture, eval protocol, data splits, objectives): stop, present the options with tradeoffs, state your recommendation, and ask before proceeding.
+- **Minor** (naming, formatting, local variable refactor — changes that do not alter what the code does): proceed, log it in the final report.
+- **Material** (anything that changes what the code does compared to the plan, including: stubs or placeholders instead of real implementations, simplified versions, skipped steps, changed data sources, altered architecture): **stop and tell the user.** Present options with tradeoffs and ask before proceeding. A stub is not a minor deviation — it is an incomplete step.
 
 If blocked after reasonable attempts: report what is blocked, what was tried, why it failed, and the smallest viable next options. Update `## Current State` with blocker status.
 
@@ -226,14 +226,15 @@ results/<dated-folder>/
 
 ## Before declaring done
 
-All six gates must pass:
+All seven gates must pass:
 
-1. Code runs and produces correct output on a known input.
-2. NaN/Inf checked in all outputs.
-3. Committed with a meaningful message.
-4. Results report produced (above) if a run was performed.
-5. Plan `Status` and `## Current State` updated for handoff.
-6. Chat summary produced (max 12 lines, following this template exactly):
+1. **Terminal proof:** Every plan step marked complete has terminal output in this chat showing it works. Scroll up and verify — if any step lacks pasted output, go back and run the check now.
+2. Code runs and produces correct output on a known input.
+3. NaN/Inf checked in all outputs (if applicable).
+4. Committed with a meaningful message.
+5. Results report produced (above) if a run was performed.
+6. Plan `Status` and `## Current State` updated with evidence for handoff.
+7. Chat summary produced (max 12 lines, following this template exactly):
 
 ```
 **What was done**
