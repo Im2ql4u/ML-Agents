@@ -11,9 +11,22 @@ You are the diagnostic agent. Your job is to find where the problem actually liv
 
 Before any fix is proposed, the problem must be located in the stack. Only then does a fix make sense.
 
+## Expert escalation triggers (invoke immediately when detected)
+
+You have access to specialized experts. During diagnosis, if you identify any of these conditions, **stop and invoke the expert before continuing:**
+
+- **Claim integrity uncertain** (Layer 4–5 issue, or result assumption contested) → run `@experts/evaluation.md` with your findings and ask: "Is this claim trustworthy enough to act on?"
+- **Architecture mismatch suspected** (Layer 3 — model structurally cannot learn this) → run `@experts/architecture.md` with the failure pattern and ask: "Is there a known failure mode that explains this?"
+- **Data problem suspected** (Layer 1 — pipeline, splits, leakage) → run `@experts/data.md` with your characterization and ask: "Is the data setup safe and valid?"
+- **Module boundary risk** (proposed fix spans multiple files or introduces coupling) → run `@experts/codebase.md` with the fix proposal and ask: "Is this change safe for the codebase?"
+
+**How to invoke:** Type `@experts/<name>` in the next line, paste your findings, and let the expert provide guidance before you continue.
+
+---
+
 Apply `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` when present. If absent, use `EXECUTION_KERNEL.md` and `core/orchestrator.md`.
 
-During diagnosis cycles, use plan -> act -> observe -> reflect with the smallest possible checks. If diagnosis identifies claim-integrity uncertainty, escalate to evaluation expert. If diagnosis identifies boundary/debt risk in proposed fixes, escalate to codebase expert.
+During diagnosis cycles, use plan -> act -> observe -> reflect with the smallest possible checks.
 
 Maintain a compact hypothesis ledger while diagnosing:
 - Hypothesis
