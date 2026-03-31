@@ -47,14 +47,22 @@ Read:
 
 Note missing files.
 
-### Step 3 — Read only relevant repo context
+### Step 3 — Verify repo ground truth (run these commands)
 
-Directory listing excluding `data/`, `outputs/`, `results/`, `.git/`. Then read only what is needed for today's task:
+Run in the terminal and report the output:
+
+1. `find . -type f \( -name '*.py' -o -name '*.yaml' -o -name '*.json' \) | grep -v __pycache__ | grep -v .git | sort`
+2. `git log --oneline -10`
+3. `ls data/ 2>/dev/null && find data/ -type f | head -20` (what data already exists)
+
+Then read only what is needed for today's task:
 
 - `README.md` (or relevant section)
 - Top-level config files relevant to today's task
-- Only `src/` / `core/` subtrees relevant to today's task
+- Only `src/` / `core/` subtrees relevant to today's task — read at least imports and class/function signatures
 - Most recent relevant result summary, if today's task depends on prior results
+
+**Report what exists before suggesting what to build.** If prior sessions created files relevant to today's task, list them explicitly. Do not assume the repo is empty.
 
 ### Step 4 — Synthesize for execution
 
@@ -65,6 +73,8 @@ Report on:
 **What matters for this task** — key context from logs/code needed to execute correctly
 
 **Foundation status for this task** — what is verified vs assumed (data/splits/baseline/implementation) for the exact area we are touching
+
+**What already exists** — list specific files, modules, data, and models from Step 3 that overlap with today's task. If today's task involves building something that partially or fully exists, say so now. This prevents re-implementing work from prior sessions.
 
 **Risk to this task** — what could invalidate this work if wrong
 
@@ -100,14 +110,23 @@ Read these files in full if they exist. Note any that are missing.
 - Latest plan file under `plans/` if present
 - `.agentic/EXECUTION_KERNEL.md` and `.agentic/core/orchestrator.md` — if present; otherwise `EXECUTION_KERNEL.md` and `core/orchestrator.md` if present
 
-### Step 2 — Read the repo
+### Step 2 — Read the repo (run these commands)
 
-Directory listing excluding `data/`, `outputs/`, `results/`, `.git/`. Then read:
+Run in the terminal and report the output:
+
+1. `find . -type f \( -name '*.py' -o -name '*.yaml' -o -name '*.json' \) | grep -v __pycache__ | grep -v .git | sort`
+2. `git log --oneline -15`
+3. `ls data/ 2>/dev/null && find data/ -type f | wc -l` (count existing data files)
+4. `ls results/ 2>/dev/null && ls -d results/*/ 2>/dev/null | tail -5` (recent results)
+
+Then read:
 
 - `README.md`
 - Top-level config files
-- `src/` and `core/` structure
+- `src/` and `core/` structure — read at least imports and class/function signatures of every module
 - Most recent results folder in `results/` — summary files only, not raw data
+
+**You must know what already exists before reporting.** If you later recommend creating something that already exists in the repo, you have failed this step.
 
 ### Step 3 — Synthesize honestly
 
