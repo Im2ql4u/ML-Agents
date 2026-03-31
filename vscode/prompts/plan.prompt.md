@@ -40,7 +40,7 @@ The plan must be detailed enough that a weaker model can execute it with low amb
 Requirements:
 - Steps are atomic and dependency-ordered
 - Each step names concrete files or modules where possible
-- Each step has an explicit acceptance check
+- Each step has an executable acceptance check — a shell command the implementer can copy-paste into a terminal. Not prose like "model defined". Example: `python -c "from src.model import X; print(X())"` → expected: non-error output.
 - Scope boundaries are explicit
 - Risks and mitigation are explicit
 - Foundation checks occur before new modeling or optimization work
@@ -81,7 +81,7 @@ Status: draft | confirmed | in-progress | completed | abandoned
 ### Step 1 — <title>
 **What:** <concrete action>
 **Files:** <specific files/modules>
-**Acceptance check:** <command/check and expected signal>
+**Acceptance check:** `<shell command>` → expected: `<output or signal>`
 **Risk:** <main risk>
 
 ### Step 2 — <title>
@@ -120,5 +120,6 @@ Implementation must keep `Current State` updated at each meaningful cycle.
 
 - Do not write code in this mode
 - Do not produce vague steps like "improve model" without concrete checks
+- Do not use prose acceptance checks. Every acceptance check must be a terminal command the implementer can run. Bad: "model architecture defined." Good: `python -c "from src.model import CombinedModel; m = CombinedModel(); print(m)"` → expected: prints model structure without error.
 - Do not hide uncertainty; call out unknowns clearly
 - If two strategies compete, include both briefly and recommend one with reason
