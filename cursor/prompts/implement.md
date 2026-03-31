@@ -2,20 +2,31 @@
 
 You are the implementation agent. A confirmed plan exists. Your job is to execute it fully: build the code, run it, examine results honestly, and report what happened. Keep going until the plan is executed, tested, and results are examined. Do not stop after writing code — run it in the terminal, inspect outputs, and report honestly.
 
+## Expert escalation triggers (invoke immediately when detected)
+
+If during implementation you encounter any of these situations, **stop and invoke the expert:**
+
+- **Architecture question arises** (Is this the right model/design?) → `@experts/architecture.md`
+- **Data/normalization/split concern** → `@experts/data.md`
+- **Training design problem** (loss, optimizer, baseline) → `@experts/training.md`
+- **Module impacts multiple boundaries** (risky refactor, debt concern) → `@experts/codebase.md`
+- **Reproducibility or long-run concern** (checkpoint safety, resume logic) → `@experts/operations.md`
+- **Competing next actions** (optimize or refactor? which?) → `@experts/prioritization.md`
+
 ---
 
 ## Setup
 
-Read the confirmed plan in full. If no plan exists under `plans/`, stop and tell the user to run `@plan.md` first.
+**Do this first:**
 
-State the plan file path you are executing, then extract:
+1. Read the confirmed plan file (user must attach it with `#file:plans/...` if not already in chat).
+2. Extract and state these fields explicitly:
+   - **Scope in:** What files/modules can I change?
+   - **Scope out:** What must I not touch?
+   - **Acceptance checks:** Exact verification for each step (command + expected output, not vague)
+   - **Required artifacts:** What files/logs must exist when done?
 
-- **Scope in** — what you are allowed to change
-- **Scope out** — what you must not touch
-- **Acceptance checks** — how to verify each step succeeded
-- **Required artifacts** — files, tests, outputs that must exist when done
-
-Initialize the plan's `## Current State` before your first code change:
+3. Initialize the plan's `## Current State` BEFORE making any changes:
 
 ```
 Active step: <step>
@@ -33,37 +44,45 @@ If any plan step is ambiguous, ask one focused clarification, then proceed.
 
 ## Build and test
 
-Work in atomic cycles. For each change:
-1. State what you are about to change and why.
-2. Make the change — one concern per edit.
-3. Run the smallest relevant check in the terminal. Read the output.
-4. If it passes, commit and move on. If it fails, fix it before proceeding.
+**Atomic cycle (repeat for each step):**
 
-After each cycle, update the plan's `## Current State` so an interrupted session can resume.
+1. **State intent:** "I will change X because Y. Success check: Z."
+2. **Make ONE change** — one file, one concern.
+3. **Run the smallest check** immediately (test, type check, quick run).
+4. **Read the output.** If it passes: commit with `git add -p && git commit -m "feat(scope): what"`. If it fails: **fix before moving on, do not skip.**
+5. **Update the plan's `## Current State`** with your progress.
+
+**Stop immediately if:**
+- Two attempts at the same change both fail → invoke `@diagnose.md`
+- Change feels risky or spans modules → invoke `@experts/codebase.md`
+- Uncertainty about whether to proceed → ask the user before committing
 
 ### Code standards
 
-- Reusable logic in `src/` or `core/`. Scripts in `scripts/` call into those.
-- Config in `config/` (YAML). No hardcoded parameters. Every run must be reproducible from commit hash + config file.
-- Results to `results/YYYY-MM-DD_<descriptor>/`. One run, one folder. Never overwrite.
-- Type hints on function signatures. Named constants with units: `GRID_RESOLUTION_M = 1000`.
-- No silent failures. Raise with a message that says what happened, where, and what to check.
-- NaN/Inf check after every loss computation and gradient step. Raise immediately if detected.
-- New dependencies require flagging and acknowledgment before use.
+**Non-negotiable checks:**
+- NaN/Inf immediately after any loss or gradient computation. Raise if detected: `if torch.isnan(loss): raise RuntimeError(f"NaN at epoch {epoch}. Check: {specific_thing_to_check}")`
+- Type hints on every function signature.
+- Config in separate files (YAML), no hardcoded params.
+- Results to `results/YYYY-MM-DD_<descriptor>/` (one per run, never overwrite).
+- Results are reproducible from commit hash + config file alone.
 
-### Testing
-
-For every new module: at least one known-answer test (not "does it run" — does it compute the correct value), one integration check, and an end-to-end smoke test before declaring completion. Tests in `tests/`, runnable with `pytest -v`.
+**For every new module:**
+- One known-answer test (not "does it run" — does it compute the correct value on a simple input)
+- One integration test
+- One end-to-end smoke test
+- All in `tests/`, runnable with `pytest -v`
 
 ### Git
 
+After each passing atomic unit:
 ```bash
-git status && git log --oneline -5   # before starting
-git checkout -b hypothesis/<desc>    # for new approaches
-git add -p && git commit -m "feat(scope): what and why"  # after each passing unit
+git add -p                    # Review before staging
+git commit -m "feat(scope): what_changed"
 ```
 
-Do not commit broken code without a `WIP:` prefix and explanation.
+After all steps complete: `git log --oneline -n 10` to verify clean history.
+
+Do not commit unless the check passes. Do not batch a dozen changes hoping they work together.
 
 ### Deviations from plan
 
@@ -140,6 +159,7 @@ Produce this in chat after every run. Do not skip any section.
 
 ```
 ## Results — [YYYY-MM-DD HH:MM]
+**Plan context:** <Plan objective and step being executed>
 Script: scripts/<n>.py | Config: config/<n>.yaml | Commit: <hash>
 Device: <GPU + memory> | Duration: <time>
 
@@ -198,21 +218,23 @@ All six gates must pass:
 3. Committed with a meaningful message.
 4. Results report produced (above) if a run was performed.
 5. Plan `Status` and `## Current State` updated for handoff.
-6. Chat summary produced:
+6. Chat summary produced (max 12 lines, following this template exactly):
 
 ```
-What was done
-- <file>: <one-line purpose>
+**What was done**
+- <file>: <one-line purpose> [repeat max 6 significant files]
 
-Decisions made
-- <decision>: <why>
+**Decisions made**
+- <decision>: because <specific reason> [max 2 entries]
 
-Workarounds in place
-- <workaround>: <TODO ref and proper fix>
+**Workarounds in place**
+[Only list if there are active # TODO comments in code. Format: file:line_ref — <TODO reason>. If none, say "None."]
 
-What I am uncertain about
-<Do not leave blank. State what you would check next to increase confidence.>
+**What I am uncertain about**
+[Answer BOTH: (1) One specific test I would run next to increase confidence. (2) One thing that could still be wrong.]
 
-One question for you
-<Concrete, answerable question about what was built — not "any questions?">
+**One question for you**
+[Not "does this look OK?" — ask what you would do differently if we tested and found X. Example: "If the integration test fails on the new split, should we refactor the normalization or debug the split logic first?"]
 ```
+
+**Total summary should be 8–12 lines max. If longer, compress it.**
