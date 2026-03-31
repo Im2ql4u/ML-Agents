@@ -23,7 +23,7 @@ If during implementation you encounter any of these situations, **stop and invok
 2. Extract and state these fields explicitly:
    - **Scope in:** What files/modules can I change?
    - **Scope out:** What must I not touch?
-   - **Acceptance checks:** Exact verification for each step (command + expected output, not vague)
+   - **Acceptance checks:** Exact verification for each step (command + expected output, not vague). **If any acceptance check is not an executable command**, rewrite it as one before proceeding. Example: "model defined" → `python -c "from src.model import X; print(X)"`. If unclear, ask.
    - **Required artifacts:** What files/logs must exist when done?
 
 3. Initialize the plan's `## Current State` BEFORE making any changes:
@@ -38,6 +38,8 @@ Blockers: <none>
 
 Execute the plan's foundation checks (data integrity, baseline verification) before writing new modeling code. If a foundation check fails, fix it before continuing.
 
+For the foundation check "Relevant existing implementation read and understood": run `find . -name '*.py' | grep -v __pycache__ | sort` if you have not already, read the imports and signatures of existing modules, and list what already exists. If the plan asks you to create something that already exists, flag this and ask before proceeding.
+
 If any plan step is ambiguous, ask one focused clarification, then proceed.
 
 ---
@@ -48,9 +50,11 @@ If any plan step is ambiguous, ask one focused clarification, then proceed.
 
 1. **State intent:** "I will change X because Y. Success check: Z."
 2. **Make ONE change** — one file, one concern.
-3. **Run the smallest check** immediately (test, type check, quick run).
+3. **Run the acceptance check in the terminal** and paste the full output in chat. Not "I ran it and it passed" — the actual terminal output. If there is no acceptance check for this step, write a quick verification command before proceeding.
 4. **Read the output.** If it passes: commit with `git add -p && git commit -m "feat(scope): what"`. If it fails: **fix before moving on, do not skip.**
-5. **Update the plan's `## Current State`** with your progress.
+5. **Update the plan's `## Current State`** with evidence: the command you ran and a summary of its output.
+
+**Evidence rule (non-negotiable):** You may not claim a step is complete without pasting terminal output that proves it. Writing a file is not completing a step — running the file and showing it works is completing a step. "I verified this" without output is not evidence.
 
 **Stop immediately if:**
 - Two attempts at the same change both fail → invoke `@diagnose.md`
@@ -94,6 +98,17 @@ If blocked after reasonable attempts: report what is blocked, what was tried, wh
 ---
 
 ## Run and examine
+
+### Verification for non-training steps
+
+Not every step involves training. For other work, verify in the terminal before claiming done:
+
+- **Data download/preparation:** `ls -la data/<dir>/ | head -10` and `wc -l data/<file>` or `python -c "import pandas as pd; df = pd.read_csv('data/X.csv'); print(df.shape, df.columns.tolist())"` — show data exists with expected structure.
+- **Model/module creation:** `python -c "from src.X import Y; print(Y())"` or `python -c "import torch; from src.model import M; m = M(); x = torch.randn(1, ...); print(m(x).shape)"` — show it instantiates and produces output.
+- **Configuration:** `python -c "import yaml; print(yaml.safe_load(open('config/X.yaml')))"` — show it parses.
+- **Preprocessing/pipeline:** run on a small sample, show output shape and values match expectations.
+
+Paste the terminal output. If you cannot verify a step in the terminal, it is not done.
 
 ### Sanity check first
 
