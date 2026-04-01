@@ -42,7 +42,9 @@ Requirements:
 
 ## Required output artifact format
 
-Write the plan using this exact structure:
+Write the plan using this exact structure.
+
+**Critical rule:** If the plan has more than ~5 atomic steps or mixes different types of work (e.g., data preparation + model building + training + evaluation), split it into **phases**. Each phase must be completable in a single implementation session. The implementer will only execute one phase at a time.
 
 ```markdown
 # Plan: <title>
@@ -69,15 +71,22 @@ Status: draft | confirmed | in-progress | completed | abandoned
 **In scope:** <explicitly allowed>
 **Out of scope:** <explicitly not allowed>
 
-## Steps
+## Phase 1 — <title> (session-sized)
+**Goal:** <what is done when this phase is complete>
+**Estimated scope:** <number of files, rough effort>
 
-### Step 1 — <title>
+### Step 1.1 — <title>
 **What:** <concrete action>
 **Files:** <specific files/modules>
 **Acceptance check:** `<shell command>` → expected: `<output or signal>`
 **Risk:** <main risk>
 
-### Step 2 — <title>
+### Step 1.2 — <title>
+...
+
+## Phase 2 — <title> (session-sized)
+**Depends on:** Phase 1 complete
+**Goal:** <what is done when this phase is complete>
 ...
 
 ## Risks and mitigations
@@ -89,12 +98,15 @@ Status: draft | confirmed | in-progress | completed | abandoned
 - <criterion>
 
 ## Current State
+**Active phase:** <number/title>
 **Active step:** <number/title>
 **Last evidence:** <latest command/check + result>
 **Current risk:** <current top risk>
 **Next action:** <next atomic move>
 **Blockers:** <none or explicit blocker>
 ```
+
+If the entire plan genuinely fits in one session (~3-5 steps, all the same type of work), phases are optional — just use flat steps.
 
 ---
 
