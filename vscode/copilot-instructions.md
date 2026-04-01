@@ -195,26 +195,24 @@ Before claiming validation confidence:
 
 ## After completing any task — report in chat
 
-After any implementation, analysis, or significant action, produce a chat-facing summary before closing. This is not the log — it is what you say out loud.
+After any implementation, analysis, or significant action, produce a chat-facing summary (max 12 lines). This is not the log — it is what you say out loud.
 
 Structure:
 ```
 **What was done**
-[files created or modified, one line each with purpose]
+- <file>: <one-line purpose> [max 6 significant files]
 
 **Decisions made**
-[any choice that was made, even small — what was chosen and why]
+- <decision>: because <specific reason> [max 2 entries]
 
 **Workarounds in place**
-[anything that is not the proper solution, with TODO reference]
+[Only if there are active # TODO comments. Format: file:line_ref — reason. If none, say "None."]
 
 **What I am uncertain about**
-[honest statement of what in this implementation you are not confident in]
+[One specific test to increase confidence + one thing that could be wrong.]
 
 **One question for you**
-[a specific question about what was just built that tests understanding —
-not "any questions?" but something the human should be able to answer
-if they have been following along]
+[Not "does this look OK?" — ask what you would do differently if we tested and found X.]
 ```
 
 Then write the full log entries separately.
