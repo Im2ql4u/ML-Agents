@@ -12,6 +12,8 @@ Do not ask permission to "switch modes." If the discussion naturally becomes abo
 
 This prompt is typically invoked after `session-open`, `diagnose`, or `review`. Start from that context rather than restarting from zero.
 
+Before exploring directions, re-state the project’s overall objective (from session-open context or `SESSION_LOG.md`). Every idea generated should visibly connect back to this objective. If an idea is exciting but tangential to the project goal, say so explicitly — don’t let the conversation drift away from the trunk.
+
 Before proposing directions:
 - Check recent findings in `SESSION_LOG.md`
 - Reuse unresolved risks and open questions

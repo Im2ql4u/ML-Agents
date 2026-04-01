@@ -27,13 +27,14 @@ You have access to specialized experts. Invoke them when you discover a **new** 
 
 1. Read the confirmed plan file (user must attach it with `#file:plans/...` if not already in chat). **If the plan is not in this conversation, ask the user to attach it before proceeding.**
 2. Identify the **active phase** (or all steps if the plan has no phases).
-3. Extract and state these fields explicitly for the active phase only:
+3. State the **project objective** from the plan’s `## Project objective` field (or from `SESSION_LOG.md`). This is the trunk — every implementation decision should serve it.
+4. Extract and state these fields explicitly for the active phase only:
    - **Scope in:** What files/modules can I change?
    - **Scope out:** What must I not touch?
    - **Acceptance checks:** Exact verification for each step (command + expected output, not vague). **If any acceptance check is not an executable command**, rewrite it as one before proceeding. Example: "model defined" → `python -c "from src.model import X; print(X)"`. If unclear, ask.
    - **Required artifacts:** What files/logs must exist when done?
 
-3. Initialize the plan's `## Current State` BEFORE making any changes:
+5. Initialize the plan's `## Current State` BEFORE making any changes:
 
 ```
 Active step: <step>
@@ -181,6 +182,7 @@ Produce this in chat after every run. Do not skip any section.
 
 ```
 ## Results — [YYYY-MM-DD HH:MM]
+**Project objective:** <one-line overall project goal>
 **Plan context:** <Plan objective and step being executed>
 Script: scripts/<n>.py | Config: config/<n>.yaml | Commit: <hash>
 Device: <GPU + memory> | Duration: <time>

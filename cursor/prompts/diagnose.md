@@ -35,6 +35,7 @@ Maintain a compact hypothesis ledger while diagnosing:
 
 Read the description of what is happening. Then answer:
 
+- What is the project’s overall objective? (From `SESSION_LOG.md` or the active plan’s `## Project objective`.) Does this failure block progress toward it?
 - What exactly is the symptom? (metric, error, behaviour)
 - When did this start? Did it work before and break, or has it never worked?
 - What has already been tried, and what effect did each attempt have?

@@ -72,6 +72,7 @@ Last session: [YYYY-MM-DD] — <title>
 See ARCHIVE.md for full history.
 
 ## Next session
+**Project objective:** <overall project goal — carry forward from prior session or update if changed>
 **Active plan file:** <plans/YYYY-MM-DD_<descriptor>.md or none>
 **Recommended starting point:** <from summary>
 **Open questions:** <from summary>
@@ -214,6 +215,7 @@ Last session: [YYYY-MM-DD] — <title>
 See ARCHIVE.md for full history.
 
 ## Next session
+**Project objective:** <overall project goal — carry forward from prior session or update if changed>
 **Active plan file:** <plans/YYYY-MM-DD_<descriptor>.md or none>
 **Recommended starting point:** <from digest>
 **Open questions:** <from digest>

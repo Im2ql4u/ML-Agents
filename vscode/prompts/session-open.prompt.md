@@ -68,7 +68,9 @@ Then read only what is needed for today's task:
 
 Report on:
 
-**Task framing** — what we are doing in this session and what is out of scope
+**Project objective** — the overall project goal (from `SESSION_LOG.md`; if not recorded yet, state your understanding from README/logs and ask the user to confirm). This is the trunk — everything below must connect to it.
+
+**Task framing** — what we are doing in this session, what is out of scope, and how this task advances the project objective
 
 **What matters for this task** — key context from logs/code needed to execute correctly
 
@@ -132,7 +134,7 @@ Then read:
 
 Report on:
 
-**Project** — one sentence: what this is and what it is genuinely trying to achieve
+**Project objective** — the overall project goal (from `SESSION_LOG.md` if it exists; otherwise state your understanding and ask). This is the trunk — everything below must connect to it.
 
 **Foundation status** — go through the diagnostic hierarchy explicitly:
 - Is the data pipeline known to be correct, or assumed?

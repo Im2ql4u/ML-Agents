@@ -52,8 +52,11 @@ Write the plan using this exact structure.
 Date: YYYY-MM-DD
 Status: draft | confirmed | in-progress | completed | abandoned
 
+## Project objective
+<the overall project goal this plan serves — one sentence from SESSION_LOG.md or session-open>
+
 ## Objective
-<one sentence goal + success condition>
+<one sentence goal + success condition for this specific plan>
 
 ## Context
 <what triggered this plan, with references to recent findings>
@@ -126,5 +129,6 @@ Implementation must keep `Current State` updated at each meaningful cycle.
 - Do not write code in this mode
 - Do not produce vague steps like "improve model" without concrete checks
 - Do not use prose acceptance checks. Every acceptance check must be a terminal command the implementer can run. Bad: "model architecture defined." Good: `python -c "from src.model import CombinedModel; m = CombinedModel(); print(m)"` → expected: prints model structure without error.
+- Every plan must visibly serve the project objective. If the plan cannot be traced back to the overall goal, discuss with the user before finalizing.
 - Do not hide uncertainty; call out unknowns clearly
 - If two strategies compete, include both briefly and recommend one with reason

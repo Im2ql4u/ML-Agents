@@ -22,12 +22,13 @@ If you detect any of these conditions during review, **stop and invoke the exper
 
 ## Mandatory first step (always do this)
 
-Before entering any mode, answer these two questions:
+Before entering any mode, answer these three questions:
 
-1. **What was the plan's objective?** (Read the active plan file if it exists. If none, skip. If user hasn't shared one, ask for it.)
-2. **What remains incomplete toward that objective?** (What steps are done, partial, or not started?)
+1. **What is the project’s overall objective?** (From `SESSION_LOG.md`, the plan’s `## Project objective`, or ask if unknown.)
+2. **What was the plan’s specific objective?** (Read the active plan file if it exists. If none, skip. If user hasn’t shared one, ask for it.)
+3. **What remains incomplete toward the plan’s objective, and does the work so far still serve the project objective?**
 
-Frame your entire review against progress toward the objective, not in isolation. You are not just auditing code — you're assessing whether the codebase is moving toward the goal.
+Frame your entire review against progress toward both the project goal (the trunk) and the plan goal (the branch). If the plan or implementation has diverged from the project objective, flag this as the first finding — before any code-level review.
 
 ---
 

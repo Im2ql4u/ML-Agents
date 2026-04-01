@@ -4,6 +4,7 @@ Last session: —
 See ARCHIVE.md for full history.
 
 ## Next session
+**Project objective:** *(the overall project goal — persists across sessions)*
 **Active plan file:** *(plans/YYYY-MM-DD_<descriptor>.md or none)*
 **Recommended starting point:** *(filled by session-close)*
 **Open questions:** *(filled by session-close)*
