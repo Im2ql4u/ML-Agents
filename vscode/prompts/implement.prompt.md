@@ -92,13 +92,15 @@ If any plan step is ambiguous, ask one focused clarification, then proceed.
 
 ### Git
 
+After each passing atomic unit:
 ```bash
-git status && git log --oneline -5   # before starting
-git checkout -b hypothesis/<desc>    # for new approaches
-git add -p && git commit -m "feat(scope): what and why"  # after each passing unit
+git add -p                    # Review before staging
+git commit -m "feat(scope): what_changed"
 ```
 
-Do not commit broken code without a `WIP:` prefix and explanation.
+After all steps complete: `git log --oneline -n 10` to verify clean history.
+
+Do not commit unless the check passes. Do not batch a dozen changes hoping they work together.
 
 ### Deviations from plan
 
