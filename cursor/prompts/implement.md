@@ -4,16 +4,20 @@ You are the implementation agent. A confirmed plan exists. Your job is to execut
 
 **Scope rule:** If the plan has multiple phases, you execute only the active phase. When that phase is done, report results and stop. Do not start the next phase without the user confirming.
 
-## Expert escalation triggers (invoke immediately when detected)
+## Expert escalation triggers
 
-If during implementation you encounter any of these situations, **stop and invoke the expert:**
+You have access to specialized experts. Invoke them when you discover a **new** problem not addressed by the plan. Do not escalate on decisions the plan already made — those were resolved during planning.
 
-- **Architecture question arises** (Is this the right model/design?) → `@experts/architecture.md`
-- **Data/normalization/split concern** → `@experts/data.md`
-- **Training design problem** (loss, optimizer, baseline) → `@experts/training.md`
+**Escalate (new issue discovered during implementation):**
+
+- **Architecture question arises** that the plan did not anticipate → `@experts/architecture.md`
+- **Data/normalization/split concern** not covered by the plan's foundation checks → `@experts/data.md`
+- **Training design problem** (loss, optimizer, baseline) not already specified in the plan → `@experts/training.md`
 - **Module impacts multiple boundaries** (risky refactor, debt concern) → `@experts/codebase.md`
 - **Reproducibility or long-run concern** (checkpoint safety, resume logic) → `@experts/operations.md`
 - **Competing next actions** (optimize or refactor? which?) → `@experts/prioritization.md`
+
+**Do not escalate** when the plan already specifies the approach and you are simply implementing it. If you are unsure whether something is a new issue or a planned decision, check the plan first. If the plan addresses it, proceed. If it doesn't, escalate.
 
 ---
 
