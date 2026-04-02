@@ -127,6 +127,9 @@ Implementation must keep `Current State` updated at each meaningful cycle.
 ## Behavior constraints
 
 - Do not write code in this mode
+- Do not execute implementation tasks in this mode
+- Do not run destructive or cleanup commands in this mode (`git clean`, `git reset --hard`, blanket deletes)
+- Only create/update plan artifacts required for planning handoff
 - Do not produce vague steps like "improve model" without concrete checks
 - Do not use prose acceptance checks. Every acceptance check must be a terminal command the implementer can run. Bad: "model architecture defined." Good: `python -c "from src.model import CombinedModel; m = CombinedModel(); print(m)"` → expected: prints model structure without error.
 - Every plan must visibly serve the project objective. If the plan cannot be traced back to the overall goal, discuss with the user before finalizing.
