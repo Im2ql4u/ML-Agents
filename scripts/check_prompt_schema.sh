@@ -73,7 +73,37 @@ do
   check_contains "$file" "## Foundation checks (must pass before new code)" "foundation checks section"
   check_contains "$file" "## Current State" "current state section"
   check_contains "$file" "Status: draft | confirmed | in-progress | completed | abandoned" "status enum"
+  check_contains "$file" "Do not execute implementation tasks in this mode" "plan-mode execution lock"
+  check_contains "$file" "Do not run destructive or cleanup commands in this mode" "plan-mode destructive command ban"
 done
+
+# Cleanup prompts must enforce non-destructive safety contract.
+for file in \
+  "cursor/prompts/cleanup.md" \
+  "vscode/prompts/cleanup.prompt.md"
+do
+  check_contains "$file" "## Safety Contract (non-destructive, always on)" "cleanup safety contract"
+  check_contains "$file" "Never run destructive blanket commands" "destructive command ban"
+  check_contains "$file" "Required approval format" "path-level approval template"
+done
+
+# Always-on core rules must include intent lock and dirty-worktree safety.
+for file in \
+  "cursor/rules/core.mdc" \
+  "vscode/copilot-instructions.md"
+do
+  check_contains "$file" "Plan-generation requests: route to plan behavior only (no code changes)" "plan routing rule"
+  check_contains "$file" "Intent lock:" "intent lock section"
+  check_contains "$file" "Dirty-worktree threshold:" "dirty-worktree safety section"
+  check_contains "$file" "Safety gate before destructive or cleanup actions" "safety gate"
+done
+
+# Kernel/orchestrator contracts must include safety and mode-lock fields.
+check_contains "EXECUTION_KERNEL.md" "Gate E: Intent Lock" "execution intent gate"
+check_contains "EXECUTION_KERNEL.md" "Gate F: Workspace Preservation" "workspace preservation gate"
+check_contains "core/orchestrator.md" "Plan-generation -> plan (no code changes)" "orchestrator plan-mode routing"
+check_contains "core/orchestrator.md" "Mode-lock rule:" "orchestrator mode lock"
+check_contains "core/orchestrator.md" "requested_mode" "orchestrator state field"
 
 if [[ $fail_count -gt 0 ]]; then
   echo ""
