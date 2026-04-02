@@ -7,6 +7,7 @@ You must follow this routing and state model for direct asks, prompt-driven work
 - Build/change request
 - Debug/failure request
 - Validate/review request
+- Plan-generation request
 - Planning/prioritization request
 - Operations/reproducibility request
 
@@ -17,16 +18,22 @@ You must follow this routing and state model for direct asks, prompt-driven work
 - Build/change -> implement
 - Debug/failure -> diagnose
 - Validate/claim -> review (validate)
+- Plan-generation -> plan (no code changes)
 - Planning/ordering -> prioritization expert
 - Repro/resume/run-health -> operations expert
 3. Apply Execution Kernel loop.
 4. Invoke gates and experts only when trigger conditions are met.
+
+Mode-lock rule:
+- If the user asks for plans/options only, do not execute implementation in the same turn.
+- Require explicit user transition signal before switching from plan to implement.
 
 ## State Model
 
 Track these fields continuously:
 - task_goal
 - active_hypothesis
+- requested_mode
 - last_action
 - last_evidence
 - current_risk
@@ -54,6 +61,10 @@ State is append-only per cycle so interrupted work can resume without losing rea
 - Retry with smaller unit, or
 - Escalate to expert.
 
+Workspace safety route:
+- If a request includes "clean", "reset", or "remove", route through cleanup safety policy first.
+- Produce a path-level approval table and await explicit approval before any removal/reset action.
+
 ## Expert Invocation Triggers
 
 Evaluation expert:
@@ -80,3 +91,4 @@ Every completed cycle returns:
 - changed_artifacts: list
 - decision_rationale: short explanation
 - uncertainty: explicit remaining unknowns
+- safety_note: destructive risk status and approval basis

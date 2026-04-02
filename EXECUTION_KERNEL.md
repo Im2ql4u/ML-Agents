@@ -17,6 +17,7 @@ You must follow this execution contract for all direct requests and prompt-invok
 - Diff hygiene: avoid unrelated refactors and whitespace churn.
 - Retry strategy: smallest corrective follow-up, not full rewrites.
 - Stop condition: if two retries fail on the same unit, escalate to diagnosis.
+- Safety strategy: no destructive operation without explicit path-level approval and preview.
 
 ## Universal Loop
 
@@ -43,6 +44,14 @@ Gate D: Safety
 - Are boundaries/dependencies affected beyond scope?
 - If yes, route to codebase expert.
 
+Gate E: Intent Lock
+- Does the action match the user's requested mode (plan vs implement vs review)?
+- If no, stop and realign before acting.
+
+Gate F: Workspace Preservation
+- Is this step removing files or resetting state?
+- If yes, require path-level approval and protected-path check before any command runs.
+
 ## Escalation Rules
 
 - Repeated failure on same symptom: route to diagnose.
@@ -58,3 +67,4 @@ Gate D: Safety
 - Delta: files changed and why.
 - Decision: continue, retry, split, escalate, done.
 - Uncertainty: what is not yet confirmed.
+- Safety: whether any destructive risk exists and how it was prevented.
