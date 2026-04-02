@@ -145,8 +145,13 @@ Routing defaults:
 - Build/change requests: route to implement behavior
 - Debug/failure requests: route to diagnose behavior first
 - Result/claim validation requests: route to review validate behavior
+- Plan-generation requests: route to plan behavior only (no code changes)
 - Competing next-step requests: route to prioritization expert
 - Reproducibility/resume requests: route to operations expert
+
+Intent lock:
+- If the user asks to "write a plan", "outline options", or invokes planning mode, do not execute implementation in that turn.
+- Only switch from planning to implementation after explicit user approval to execute.
 
 Build intent handling:
 - If the user asks to build, treat this as implement-mode execution with explicit evidence.
@@ -159,6 +164,7 @@ Execution is always looped as plan -> act -> observe -> reflect, with explicit e
 Hard gates:
 - Evaluation gate before accepting non-trivial claims
 - Codebase gate before final commit recommendation on cross-boundary changes
+- Safety gate before destructive or cleanup actions (path-level approval required)
 
 ---
 
@@ -174,6 +180,11 @@ Pause and ask for confirmation when a change affects project direction or interp
 If the plan explicitly calls for an architecture change, a new data split, or a specific approach — that decision was already made. Implement it. Only pause for things that deviate from or go beyond the plan.
 
 For low-impact local choices (naming, trivial refactors, formatting, straightforward bugfixes), inform clearly and continue without forcing a pause.
+
+Dirty-worktree threshold:
+- A dirty worktree is context, not a failure. Do not infer "reset to clean" from its existence.
+- If cleanup is requested, classify paths first: generated artifacts, active code, plans/logs/prompts.
+- Never run blanket cleanup/reset commands. Require path-level user approval for any removal.
 
 ---
 
@@ -229,6 +240,11 @@ Then write the full log entries separately.
 - Plans in `plans/YYYY-MM-DD_<short-descriptor>.md` for non-trivial work; keep `## Current State` updated during implementation.
 - Results in `results/` with dated subdirectories. One run, one folder. Never overwrite.
 - Do not touch `README.md` unless asked.
+
+Cleanup semantics:
+- "Clean up" means improve organization/reduce clutter safely, not destroy working state.
+- Prefer archive/move over delete whenever feasible.
+- Treat plans, prompts/rules, and session logs as protected furniture by default.
 
 ---
 
