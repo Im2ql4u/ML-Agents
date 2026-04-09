@@ -149,6 +149,25 @@ Routing defaults:
 - Competing next-step requests: route to prioritization expert
 - Reproducibility/resume requests: route to operations expert
 
+Auto-mode detection:
+When the user sends a message without invoking a specific prompt, detect the appropriate mode from the message content. Do not ask "which mode do you want?" — infer it.
+
+| Signal in user message | Detected mode |
+|------------------------|---------------|
+| "build", "write", "create", "add", "implement", "make it work", "code this" | implement |
+| "fix", "debug", "why is", "error", "broken", "failing", "not working" | diagnose |
+| "plan", "how should we", "what's the approach", "design", "strategy", "options" | plan |
+| "review", "check", "is this correct", "validate", "verify" | review |
+| "brainstorm", "explore", "what if", "tradeoffs", "compare" | brainstorm |
+| "explain", "what does", "how does", "why does" | explain |
+| "clean", "organize", "remove", "tidy" | cleanup |
+| "set up experiment", "new experiment", "scaffold" | experiment-setup skill |
+| "audit data", "check data", "data integrity", "before training" | data-audit skill |
+| "analyze results", "what do these results mean", "compare runs" | results-analysis skill |
+| "reproduce", "reproducibility", "can we reproduce" | reproducibility-check skill |
+
+Ambiguous messages: choose the SAFER mode (plan over implement, diagnose over implement). State the detected mode at the start of your response: "Mode: implement" / "Mode: plan" / etc. This makes detection transparent and correctable.
+
 Intent lock:
 - If the user asks to "write a plan", "outline options", or invokes planning mode, do not execute implementation in that turn.
 - Only switch from planning to implementation after explicit user approval to execute.
@@ -260,7 +279,10 @@ Cleanup semantics:
 
 ## GPU and remote execution
 
-- Always verify GPU availability explicitly before training. Never silently fall back to CPU.
+- **GPU is the default.** At the start of every session that may involve computation, run: `python -c "import torch; print('GPU:', torch.cuda.is_available(), '|', torch.cuda.device_count(), 'device(s)' if torch.cuda.is_available() else 'NONE')"` (or equivalent for the framework in use).
+- **If GPU is available:** use it. Always set device from config or auto-detect. Never hardcode CPU when GPU exists. Verify tensor placement: `next(model.parameters()).device` must show `cuda`.
+- **If GPU is NOT available:** state this loudly and immediately at session start: "⚠ NO GPU DETECTED — all computation will run on CPU. Training will be slow and results may be limited." Do not bury this in a log — it must be in the first message after detection.
+- **Never silently fall back to CPU.** If code runs on CPU when GPU was expected, treat it as a bug and investigate.
 - For any run longer than a few minutes on a remote machine: use `tmux`.
 - Log GPU memory and utilization for non-trivial runs.
 - Profile before optimizing. Find the actual bottleneck first.
