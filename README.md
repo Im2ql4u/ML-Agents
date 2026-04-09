@@ -42,6 +42,8 @@ The installer will ask whether you want Cursor, VS Code, or both.
 
 **What it does:**
 - Installs prompt and rules files into `.cursor/` and/or `.github/`
+- Installs path-specific instructions (`.cursor/rules/*.mdc` and/or `.github/instructions/*.instructions.md`)
+- Installs ML/R&D skills into `.github/skills/` (VS Code only)
 - Installs shared orchestration contracts into `.agentic/` (`EXECUTION_KERNEL`, `orchestrator`, `tool interfaces`)
 - Installs log templates (`SESSION_LOG.md`, `DECISIONS.md`, `JOURNAL.md`, `ARCHIVE.md`) if they do not already exist
 - If any file it would install already exists in your repo, it **moves your existing file** to `.agentic-backup/YYYY-MM-DD_HH-MM/` before installing — nothing is ever deleted
@@ -115,7 +117,11 @@ your-project/
 │       └── INTERFACES.md
 ├── .cursor/
 │   ├── rules/
-│   │   └── core.mdc                    ← always active
+│   │   ├── core.mdc                    ← always active
+│   │   ├── python.mdc                  ← active on **/*.py
+│   │   ├── config.mdc                  ← active on config/**
+│   │   ├── data.mdc                    ← active on data/**
+│   │   └── tests.mdc                   ← active on tests/**
 │   └── prompts/
 │       ├── session-open.md
 │       ├── session-close.md
@@ -151,6 +157,16 @@ your-project/
 │       └── INTERFACES.md
 ├── .github/
 │   ├── copilot-instructions.md         ← always active
+│   ├── instructions/
+│   │   ├── python.instructions.md      ← active on **/*.py
+│   │   ├── config.instructions.md      ← active on config/**
+│   │   ├── data.instructions.md        ← active on data/**
+│   │   └── tests.instructions.md       ← active on tests/**
+│   ├── skills/
+│   │   ├── experiment-setup/SKILL.md   ← /experiment-setup
+│   │   ├── data-audit/SKILL.md         ← /data-audit
+│   │   ├── results-analysis/SKILL.md   ← /results-analysis
+│   │   └── reproducibility-check/SKILL.md ← /reproducibility-check
 │   └── prompts/
 │       ├── session-open.prompt.md
 │       ├── session-close.prompt.md
@@ -198,6 +214,28 @@ your-project/
 | `experts/codebase` | Codebase quality gate — boundary/debt checks and safe sequencing before commit. |
 | `experts/prioritization` | Prioritization gate — ranks next actions by impact, confidence, effort, and risk. |
 | `experts/operations` | Operations gate — run reproducibility, resume safety, and environment health checks. |
+
+### Path-specific instructions (automatic)
+
+These activate automatically when editing files matching their pattern. No manual invocation needed.
+
+| Instruction | Applies to | What it enforces |
+|-------------|-----------|------------------|
+| `python` | `**/*.py` | Type hints, NaN/Inf checks, config-driven params, reproducibility seeds, logging standards. |
+| `config` | `config/**`, `**/*.yaml`, `**/*.yml` | Descriptive keys, grouped sections, no absolute paths, immutable per run. |
+| `data` | `data/**` | Raw data read-only, validate after transforms, check leakage, document provenance. |
+| `tests` | `tests/**` | Known-answer tests, deterministic seeds, tolerance assertions, smoke tests. |
+
+### Skills (on-demand, VS Code only)
+
+Skills are invoked with `/skill-name` in chat or auto-loaded when the agent detects a matching task.
+
+| Skill | When to use |
+|-------|-------------|
+| `/experiment-setup` | Starting a new experiment, creating baselines, scaffolding model variants. |
+| `/data-audit` | Before first training, after preprocessing changes, when results are suspicious. |
+| `/results-analysis` | After training completes, comparing experiments, preparing results for sharing. |
+| `/reproducibility-check` | Before sharing results, after suspicious outcomes, resuming old work. |
 
 ---
 

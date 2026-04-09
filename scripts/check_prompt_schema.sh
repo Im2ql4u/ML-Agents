@@ -39,6 +39,9 @@ do
   check_contains "$file" "## Report" "results report section"
   check_contains "$file" "## Current State" "plan current state requirement"
   check_contains "$file" "### Sanity check first" "sanity check protocol"
+  check_contains "$file" "Step-level scope rule (non-negotiable)" "step-level scope gate"
+  check_contains "$file" "Phase transition gate (non-negotiable)" "phase transition reflection gate"
+  check_contains "$file" "Scientific sanity rule (non-negotiable)" "scientific sanity check"
 done
 
 # Diagnose prompt must include all 5 hierarchy layers and hypothesis ledger.
@@ -62,6 +65,8 @@ do
   check_contains "$file" "### Session metrics" "session metrics section"
   check_contains "$file" "NEGATIVE format" "negative-result journaling instruction"
   check_contains "$file" "comparison entry" "comparison entry instruction"
+  check_contains "$file" "## Step 0 — Git status check" "git status check step"
+  check_contains "$file" "git push" "git push instruction"
 done
 
 # Plan prompts must include required plan scaffold.
@@ -96,6 +101,8 @@ do
   check_contains "$file" "Intent lock:" "intent lock section"
   check_contains "$file" "Dirty-worktree threshold:" "dirty-worktree safety section"
   check_contains "$file" "Safety gate before destructive or cleanup actions" "safety gate"
+  check_contains "$file" "GPU is the default" "GPU-first policy"
+  check_contains "$file" "NO GPU DETECTED" "no-GPU loud warning"
 done
 
 # Kernel/orchestrator contracts must include safety and mode-lock fields.
@@ -104,6 +111,43 @@ check_contains "EXECUTION_KERNEL.md" "Gate F: Workspace Preservation" "workspace
 check_contains "core/orchestrator.md" "Plan-generation -> plan (no code changes)" "orchestrator plan-mode routing"
 check_contains "core/orchestrator.md" "Mode-lock rule:" "orchestrator mode lock"
 check_contains "core/orchestrator.md" "requested_mode" "orchestrator state field"
+
+# Auto-mode detection must exist in always-on core rules.
+for file in \
+  "cursor/rules/core.mdc" \
+  "vscode/copilot-instructions.md"
+do
+  check_contains "$file" "Auto-mode detection:" "auto-mode detection section"
+  check_contains "$file" "Detected mode" "mode detection signal table"
+done
+
+# Implement prompts must include post-implementation review.
+for file in \
+  "cursor/prompts/implement.md" \
+  "vscode/prompts/implement.prompt.md"
+do
+  check_contains "$file" "## Post-implementation review" "post-implementation review section"
+  check_contains "$file" "### Results assessment (honest)" "honest results assessment"
+done
+
+# Path-specific instructions must exist for VS Code.
+for instruction in python config data tests; do
+  check_contains "vscode/instructions/${instruction}.instructions.md" "applyTo:" "applyTo frontmatter in ${instruction} instructions"
+done
+
+# Path-specific rules must exist for Cursor.
+for rule in python config data tests; do
+  check_contains "cursor/rules/${rule}.mdc" "globs:" "globs frontmatter in ${rule} rule"
+done
+
+# ML/R&D skills must exist.
+for skill in experiment-setup data-audit results-analysis reproducibility-check; do
+  check_contains "vscode/skills/${skill}/SKILL.md" "name: ${skill}" "name field in ${skill} skill"
+  check_contains "vscode/skills/${skill}/SKILL.md" "description:" "description field in ${skill} skill"
+  check_contains "vscode/skills/${skill}/SKILL.md" "## When to Use" "when-to-use section in ${skill} skill"
+  check_contains "vscode/skills/${skill}/SKILL.md" "## Procedure" "procedure section in ${skill} skill"
+  check_contains "vscode/skills/${skill}/SKILL.md" "## Acceptance Criteria" "acceptance criteria in ${skill} skill"
+done
 
 if [[ $fail_count -gt 0 ]]; then
   echo ""

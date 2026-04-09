@@ -197,6 +197,11 @@ if [[ "$INSTALL_CURSOR" == true ]]; then
   header "Cursor — rules"
   install_file "cursor/rules/core.mdc" ".cursor/rules/core.mdc"
 
+  header "Cursor — path-specific rules"
+  for rule in python config data tests; do
+    install_file "cursor/rules/${rule}.mdc" ".cursor/rules/${rule}.mdc"
+  done
+
   header "Cursor — prompts"
   for prompt in session-open session-close plan brainstorm implement review diagnose explain; do
     install_file "cursor/prompts/${prompt}.md" ".cursor/prompts/${prompt}.md"
@@ -214,6 +219,16 @@ fi
 if [[ "$INSTALL_VSCODE" == true ]]; then
   header "VS Code — always-active rules"
   install_file "vscode/copilot-instructions.md" ".github/copilot-instructions.md"
+
+  header "VS Code — path-specific instructions"
+  for instruction in python config data tests; do
+    install_file "vscode/instructions/${instruction}.instructions.md" ".github/instructions/${instruction}.instructions.md"
+  done
+
+  header "VS Code — skills"
+  for skill in experiment-setup data-audit results-analysis reproducibility-check; do
+    install_file "vscode/skills/${skill}/SKILL.md" ".github/skills/${skill}/SKILL.md"
+  done
 
   header "VS Code — prompts"
   for prompt in session-open session-close plan brainstorm implement review diagnose explain; do
