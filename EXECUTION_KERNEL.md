@@ -18,6 +18,8 @@ You must follow this execution contract for all direct requests and prompt-invok
 - Retry strategy: smallest corrective follow-up, not full rewrites.
 - Stop condition: if two retries fail on the same unit, escalate to diagnosis.
 - Safety strategy: no destructive operation without explicit path-level approval and preview.
+- Specialist budget: at most 2 experts per cycle. A third expert requires explicit user approval. Default path is zero experts — expert activation is the exception, not the norm.
+- Cycle cost cap: if a single cycle exceeds 15 tool calls or generates more than 3 expert invocations across retries, stop the cycle and escalate to the user with a summary of what was attempted and why it has not converged.
 
 ## Universal Loop
 

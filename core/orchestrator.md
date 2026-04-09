@@ -67,20 +67,28 @@ Workspace safety route:
 
 ## Expert Invocation Triggers
 
+Budget: at most 2 experts per cycle. Default path is zero experts. If a third expert appears necessary, stop and escalate to the user.
+
+Each trigger below requires a concrete observable — not a subjective judgment. If the observable is not met, do not invoke the expert.
+
 Evaluation expert:
-- Non-trivial claim is about to be accepted.
-- Baseline or metric interpretation is uncertain.
+- A result claim is about to be accepted AND no executable test validates it.
+- A metric delta is being interpreted AND no baseline value exists for comparison.
+- Confidence is stated as high but evidence is indirect or single-source.
 
 Codebase expert:
-- Diff spans boundaries/modules.
-- Debt risk, coupling risk, or refactor sequencing uncertainty.
+- Diff touches files in 3+ distinct directories or modules.
+- A new dependency is introduced or an existing module's public interface changes.
+- A workaround is being committed that was originally flagged as temporary.
 
 Prioritization expert:
-- Multiple valid next actions compete.
-- Effort/impact tradeoff is unclear.
+- 3+ candidate next actions exist and none has a clear evidence advantage.
+- Estimated effort for the top candidate exceeds 1 session and alternatives exist.
 
 Operations expert:
-- Long-running jobs, resume logic, reproducibility checks, environment drift.
+- Training run ETA exceeds 30 minutes.
+- A checkpoint or resume path is being relied on but has not been tested.
+- Environment or dependency versions differ from the last successful run.
 
 ## Fusion Step
 
