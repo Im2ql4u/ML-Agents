@@ -62,6 +62,25 @@ Gate F: Workspace Preservation
 - Competing next steps: route to prioritization.
 - Reproducibility/resume concerns: route to operations.
 
+## Human Override Policy
+
+Gates exist to prevent errors, not to block the user. When a gate is too rigid for a legitimate situation, the user can override — but not silently.
+
+### Bypassable with explicit user approval
+
+- Gate A (Atomicity): user may approve a larger-than-atomic change if they accept the review cost. State the scope and get confirmation.
+- Gate C (Intent Match): user may proceed despite uncertain intent match if they confirm the observed behavior is acceptable.
+- Gate D (Safety / codebase expert): user may skip codebase expert review if the cross-boundary change is intentional and understood.
+- Specialist budget cap: user may approve a third expert in a cycle if the situation genuinely requires it.
+- Cycle cost cap: user may extend a cycle past 15 tool calls if they acknowledge the exploration cost.
+
+### Never bypassable
+
+- Gate B (Evidence): no claim of progress without evidence. This is non-negotiable regardless of user request. If a user says "just mark it done," respond with the specific check that would produce evidence and offer to run it.
+- Gate E (Intent Lock): the agent must not switch modes (plan → implement, review → implement) without explicit user transition signal. User may request the switch, but the agent may not infer it.
+- Gate F (Workspace Preservation): destructive operations require path-level approval and protected-path check. No override skips this. If the user asks to "just delete everything," produce the approval table and wait.
+- Safety strategy (destructive ops): no destructive operation without preview + approval. Cannot be bypassed even if the user says "I trust you."
+
 ## Required Output Shape For Every Task
 
 - Intent: what was attempted.
