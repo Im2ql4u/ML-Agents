@@ -252,6 +252,36 @@ results/<dated-folder>/
 
 ---
 
+## Review handoff package (mandatory)
+
+When a run or phase completes, emit this block so `review` can validate outcomes without re-parsing the entire session:
+
+```
+## Review Handoff
+Run ID: <YYYY-MM-DD_<descriptor>>
+Recommended review mode: <validate|debug|full>
+Claim under test: <single concrete claim>
+Baseline reference: <baseline run/metric used for comparison>
+Acceptance checks run:
+- <command>: <key output>
+- <command>: <key output>
+Artifacts:
+- Plan file: <path>
+- Config file: <path>
+- Results path: <path>
+- Commit: <hash>
+Unresolved uncertainty:
+- <bullet>
+- <bullet>
+```
+
+Rules:
+- If any field is unavailable, set it to `unknown` and explain why.
+- `Recommended review mode` must be justified by risk: use `validate` for result claims, `debug` for failures/anomalies, `full` for cross-module or architecture-impacting changes.
+- Do not mark implementation complete without this block when a run/phase finished.
+
+---
+
 ## Post-implementation review
 
 After completing all planned steps (or when handing back to the user), produce this status review. It is mandatory — do not skip it or replace it with "everything looks good."

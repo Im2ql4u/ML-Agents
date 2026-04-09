@@ -215,8 +215,6 @@ Do not force entries. If nothing failed, skip this step. If a failure was alread
 
 ---
 
----
-
 ### Step 5 — Update JOURNAL.md
 
 Only if an experiment was run:

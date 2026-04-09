@@ -23,6 +23,25 @@ Before entering any mode, answer these three questions:
 
 Frame your entire review against progress toward both the project goal (the trunk) and the plan goal (the branch). If the plan or implementation has diverged from the project objective, flag this as the first finding — before any code-level review.
 
+## Implement-to-review intake (mandatory when reviewing finished runs)
+
+If review is being run after `implement` completion, do this before entering debug/validate/full mode:
+
+1. Locate the latest `## Review Handoff` block from implement output.
+2. Verify required fields exist:
+	- Run ID
+	- Recommended review mode
+	- Claim under test
+	- Baseline reference
+	- Acceptance checks run (commands + key outputs)
+	- Artifacts (plan/config/results path/commit)
+	- Unresolved uncertainty
+3. If any field is missing, return `status: blocked` with a missing-fields list and the exact artifacts needed. Do not continue with partial context.
+4. Set the review mode from the handoff recommendation unless the user explicitly overrides it.
+5. Validate evidence completeness: every major claim in the handoff must map to at least one concrete check output. If not, downgrade confidence and route to evaluation or request missing checks.
+
+If no handoff exists, ask implementer output to be rerun with the handoff block before validating result claims.
+
 ---
 
 ## Execution kernel and orchestration compliance
@@ -170,3 +189,23 @@ Flag foundation issues before anything else. Nothing above the foundation is mea
 - **Minor** — style or small improvements
 
 Lead with critical. Do not bury important findings in a long list of minor ones.
+
+---
+
+## Review output contract
+
+Always end with this compact contract:
+
+```
+Status: done | iterate | blocked | escalated
+Mode used: debug | validate | full
+Primary claim assessed: <text>
+Verdict: ship | iterate | rollback | blocked
+Evidence quality: strong | moderate | weak
+Top risks:
+- <bullet>
+- <bullet>
+Next required action: <single concrete action>
+```
+
+If `Verdict` is `ship`, include one sentence stating why alternative explanations were ruled out.
