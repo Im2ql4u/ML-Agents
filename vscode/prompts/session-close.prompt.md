@@ -198,6 +198,23 @@ Only if a genuine architectural or methodological decision was made:
 
 Zero entries per session is fine. Do not pad this file.
 
+### Step 4.5 — Update Negative Memory in DECISIONS.md
+
+If any approach was tried and failed, was abandoned, or produced inconclusive results this session, append an entry to the `## Negative Memory` section of `DECISIONS.md`:
+
+```
+### [YYYY-MM-DD] — FAILED: <what was tried>
+**What:** <the approach or pattern that was attempted>
+**Why it failed:** <root cause or best understanding>
+**Evidence:** <concrete output, error, or metric that proves failure>
+**What to do instead:** <known better alternative, or "unknown — needs investigation">
+**Severity:** dead-end | needs-rethink | minor-setback
+```
+
+Do not force entries. If nothing failed, skip this step. If a failure was already logged in a prior session's negative memory and this session hit the same root cause, note the recurrence — if it is the third occurrence, promote it to a permanent decision/constraint entry.
+
+---
+
 ---
 
 ### Step 5 — Update JOURNAL.md

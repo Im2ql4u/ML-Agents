@@ -34,7 +34,7 @@ Do not proceed until these are clear.
 Read:
 
 - `SESSION_LOG.md` — full file
-- `DECISIONS.md` — latest 1–2 entries
+- `DECISIONS.md` — latest 1–2 entries AND the full `## Negative Memory` section
 - `JOURNAL.md` — latest 1–2 entries
 - `ARCHIVE.md` — latest entry only
 - Latest plan file under `plans/` if present
@@ -75,7 +75,7 @@ Report on:
 
 **Risk to this task** — what could invalidate this work if wrong
 
-**Negative-history check** — what prior failed or inconclusive attempts are relevant from `JOURNAL.md`, and what this session must avoid repeating
+**Negative-history check** — check `DECISIONS.md` → `## Negative Memory` section AND recent `JOURNAL.md` NEGATIVE entries. If any prior failed or inconclusive approach is relevant to today's task, list it explicitly and state what this session must avoid. If no relevant failures exist, state "no relevant negative history."
 
 **Comparison opportunity** — if 2+ recent experiment entries target the same question, note that a comparison entry should be produced at close
 
@@ -146,7 +146,7 @@ State what is verified and what is assumed. Do not conflate them.
 
 **Open questions** — unresolved things that need a decision before proceeding
 
-**Negative-history check** — relevant failed/inconclusive attempts and their implications for today's plan
+**Negative-history check** — check `DECISIONS.md` → `## Negative Memory` section AND `JOURNAL.md` NEGATIVE entries. List relevant failed approaches and their implications for today's plan. If no relevant failures exist, state "no relevant negative history."
 
 **Comparison opportunity** — whether current and prior experiments should be summarized as a comparison entry at close
 
