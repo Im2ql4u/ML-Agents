@@ -82,6 +82,40 @@ Prioritization expert:
 Operations expert:
 - Long-running jobs, resume logic, reproducibility checks, environment drift.
 
+## Fusion Step
+
+When two or more experts are invoked in the same cycle, their outputs must be merged before routing continues. Do not pick one expert's output and ignore the other. Do not pass both outputs as separate blobs into the next action.
+
+### Fusion procedure
+
+1. Extract the structured fields from each expert output (claim, evidence, confidence, risk, recommendation, uncertainty).
+2. For each field, compare across experts:
+   - **Agreement:** both experts align on the field value → use the shared value.
+   - **Complementary:** experts address different aspects → combine into one merged field.
+   - **Conflict:** experts disagree on the same aspect → resolve using the tie-break rules below.
+3. Emit one fused output using the standard specialist output shape (see `tools/INTERFACES.md` → `specialist_output`).
+
+### Conflict tie-break rules (apply in order)
+
+1. **Evidence weight:** the expert with more concrete, verifiable evidence wins. Self-reported confidence without evidence does not count.
+2. **Conservatism:** if evidence quality is tied, the more conservative recommendation wins (rollback > iterate > ship; refactor_first > split_change > commit_now).
+3. **Escalation:** if conservatism is also tied, the fusion step does not resolve — escalate to the user with both positions stated clearly.
+
+### Fused output shape
+
+```
+Fused state:
+- merged_claims: <combined claims from all experts>
+- supporting_evidence: <strongest evidence for each claim>
+- overall_confidence: <lowest confidence across experts, unless evidence justifies raising it>
+- overall_risk: <highest risk across experts>
+- recommendation: <single action — resolved by tie-break if conflicting>
+- open_uncertainty: <union of all expert uncertainties>
+- conflict_log: <any disagreements and how they were resolved, or "none">
+```
+
+The fused output is the sole input to the routing decision. Individual expert outputs do not feed forward independently.
+
 ## Output Contract
 
 Every completed cycle returns:
