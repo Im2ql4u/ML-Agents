@@ -21,6 +21,7 @@ Before writing the plan:
 - Use the latest session context from `SESSION_LOG.md`
 - Use relevant findings from the immediately preceding `session-open`, `diagnose`, `review`, or `brainstorm` output
 - Reuse prior negative findings in `JOURNAL.md` so failed directions are not repeated without a stated reason
+- Check `DECISIONS.md` → `## Negative Memory` for structured failure history. If any prior failed approach is relevant to this plan's objective, list it in the Context section and explain how this plan avoids the same failure. If no relevant failures exist, note "no relevant negative history."
 
 Do not re-ground the entire repository unless there is missing context that blocks planning.
 
@@ -95,6 +96,11 @@ Status: draft | confirmed | in-progress | completed | abandoned
 ## Risks and mitigations
 - <risk>: <mitigation>
 - <risk>: <mitigation>
+
+## Anticipated expert invocations
+List any steps where specialist consultation is expected during implementation. The execution kernel enforces a 2-expert-per-cycle hard cap, so plans that routinely require 3+ experts per step must be restructured.
+- Step <N>: <expert> — reason: <why this step may need specialist input>
+- (If no expert invocations anticipated, write "None anticipated — standard implementation path.")
 
 ## Success criteria
 - <criterion>
