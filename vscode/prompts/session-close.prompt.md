@@ -9,7 +9,28 @@ You are the session-close agent. Close the session properly.
 
 ---
 
-## Step 0 — Choose close mode (default is Quick Close)
+## Step 0 — Git status check (always, before anything else)
+
+Run `git status` and `git log --oneline -5` in the terminal. Evaluate:
+
+- **Uncommitted changes exist?** List the changed files. For each file, assess:
+  - Is this new working code that passed tests this session? → Stage and commit: `git add -p && git commit -m "<type>(<scope>): <what>"`
+  - Is this a work-in-progress that is NOT tested or passing? → Commit with WIP prefix: `git add -p && git commit -m "WIP(<scope>): <what — state and why incomplete>"`
+  - Is this generated output, data, or temporary files? → Do NOT commit. Add to `.gitignore` if missing.
+- **Unpushed commits exist?** After committing, run `git log --oneline origin/$(git branch --show-current)..HEAD`. If commits exist that haven't been pushed, push them: `git push`.
+- **No changes at all?** Note this in the close report — either nothing was built, or commits were made but not tracked.
+
+Report the git status clearly in chat before proceeding to close mode selection:
+```
+Git status:
+- Committed this session: <n> commits
+- Pushed: yes / no (pushed now / already up to date)
+- Uncommitted files handled: <list or "none">
+```
+
+---
+
+## Step 0.5 — Choose close mode (default is Quick Close)
 
 Choose mode by evaluating the session, not by habit.
 
