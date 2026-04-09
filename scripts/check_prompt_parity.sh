@@ -24,6 +24,10 @@ PAIRS=(
   "cursor/prompts/experts/prioritization.md:vscode/prompts/experts/prioritization.prompt.md"
   "cursor/prompts/experts/operations.md:vscode/prompts/experts/operations.prompt.md"
   "cursor/rules/core.mdc:vscode/copilot-instructions.md"
+  "cursor/rules/python.mdc:vscode/instructions/python.instructions.md"
+  "cursor/rules/config.mdc:vscode/instructions/config.instructions.md"
+  "cursor/rules/data.mdc:vscode/instructions/data.instructions.md"
+  "cursor/rules/tests.mdc:vscode/instructions/tests.instructions.md"
 )
 
 mismatch_count=0
