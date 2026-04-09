@@ -84,3 +84,9 @@ If uncertain between two framings, say so and explain what would distinguish the
 ## Step 6 — What else matters
 
 Is there anything about the problem context — deployment, stakeholder, data properties, domain knowledge — not mentioned that might change the framing significantly? Raise it.
+
+---
+
+## Specialist Output (required)
+
+After your domain-specific analysis, emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

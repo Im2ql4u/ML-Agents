@@ -42,3 +42,5 @@ Decision: <proceed|repair_environment|stop>
 Why: <short reason>
 Next operational step: <single concrete action>
 ```
+
+After your domain-specific output above, also emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

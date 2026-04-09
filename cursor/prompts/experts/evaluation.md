@@ -51,3 +51,5 @@ Decision: <ship|iterate|rollback>
 Why: <short reason>
 Next verification step: <single concrete check>
 ```
+
+After your domain-specific output above, also emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

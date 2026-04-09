@@ -124,3 +124,9 @@ Concrete:
 6. Final evaluation protocol
 
 Flag explicitly what is uncertain and what you would want to verify before committing to a full run.
+
+---
+
+## Specialist Output (required)
+
+After your domain-specific analysis, emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

@@ -41,3 +41,5 @@ Safe sequence: <ordered bullets>
 Recommendation: <commit_now|split_change|refactor_first>
 Why: <short reason>
 ```
+
+After your domain-specific output above, also emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

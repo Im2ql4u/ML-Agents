@@ -82,3 +82,9 @@ Make a concrete recommendation:
 ## Step 5 — What might have been missed
 
 Is there any aspect of the architecture decision — data characteristics, deployment constraints, evaluation requirements — not mentioned but that matters? Raise it.
+
+---
+
+## Specialist Output (required)
+
+After your domain-specific analysis, emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

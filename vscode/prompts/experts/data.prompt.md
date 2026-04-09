@@ -140,3 +140,9 @@ Given everything above:
 For each decision, state what you are assuming and what would change if that assumption were wrong.
 
 Flag anything uncertain. A data pipeline that looks correct but has a subtle flaw is the most dangerous kind — it produces results that are trusted when they should not be.
+
+---
+
+## Specialist Output (required)
+
+After your domain-specific analysis, emit the standard `specialist_output` block defined in `tools/INTERFACES.md`. This is required for fusion when multiple experts are active in the same cycle.

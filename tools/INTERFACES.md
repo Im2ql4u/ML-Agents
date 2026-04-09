@@ -26,6 +26,27 @@ Output: <structured result using this interface schema>
 
 If an expected output field is unavailable, set it to `unknown` and state why.
 
+## specialist_output
+
+Every expert must emit this normalized output block at the end of their response, in addition to their domain-specific analysis. This is the contract the fusion step uses to merge multi-expert outputs.
+
+```
+Specialist: <expert name>
+Claims: <numbered list of specific, falsifiable claims>
+Evidence: <concrete outputs, metrics, or checks supporting each claim>
+Confidence: high | medium | low
+Risk: low | medium | high
+Recommendation: <single concrete action>
+Open uncertainty: <what is not yet confirmed>
+Notes: <optional — bounded free-form context, max 3 sentences>
+```
+
+Rules:
+- Confidence must be justified by evidence, not self-assessed from fluency.
+- If evidence is indirect or single-source, confidence cannot be "high."
+- If the expert cannot fill a required field, it must state why rather than omit it.
+- The Notes field is the only place for free-form prose. All other fields are structured.
+
 ## navigate
 
 Input:
