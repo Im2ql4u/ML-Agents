@@ -90,11 +90,34 @@ Operations expert:
 - A checkpoint or resume path is being relied on but has not been tested.
 - Environment or dependency versions differ from the last successful run.
 
+Synthesis expert (does not count against the 2-expert budget):
+- Two or more experts were invoked in the same cycle and their outputs need merging.
+- Diagnose and brainstorm (or any two modes) produced different framings of the same problem.
+- Evidence from implementation contradicts the plan hypothesis.
+- Review found issues that span multiple expert domains.
+
 ## Fusion Step
 
 When two or more experts are invoked in the same cycle, their outputs must be merged before routing continues. Do not pick one expert's output and ignore the other. Do not pass both outputs as separate blobs into the next action.
 
-### Fusion procedure
+### Synthesis expert routing
+
+When two or more expert outputs need merging, route through the **synthesis expert** (`@experts/synthesis`) instead of applying mechanical fusion. The synthesis expert performs evidence-weighted reasoning to reconcile agreements, tensions, and contradictions — not just field-level comparison.
+
+Invoke the synthesis expert with all expert outputs pasted as input. The synthesis expert:
+1. Maps the signals (what each expert claims and why)
+2. Classifies relationships (agreement, complementary, tension, contradiction)
+3. Resolves conflicts by evidence quality, conservatism, and project constraints
+4. Checks the fused recommendation against `CONSTRAINTS.md` and Negative Memory
+5. Emits one fused recommendation with confidence, risk, and quality signals
+
+The synthesis expert does NOT count against the 2-expert-per-cycle budget — it operates on expert outputs, not alongside them.
+
+If the synthesis expert cannot resolve a contradiction (evidence is insufficient), it will recommend a specific disambiguating check as the next action rather than forcing a resolution.
+
+### Fallback fusion procedure (when synthesis expert is unavailable)
+
+If the synthesis expert cannot be invoked (e.g., tool limitations), apply the mechanical fusion procedure:
 
 1. Extract the structured fields from each expert output (claim, evidence, confidence, risk, recommendation, uncertainty).
 2. For each field, compare across experts:

@@ -146,3 +146,24 @@ Output:
 - missing_requirements: list
 - state_health: healthy | degraded | unknown
 - recommendation: proceed | repair_environment | stop
+
+## synthesize
+
+Input:
+- signals: list of specialist_output blocks (or structured findings from modes)
+- constraints_context: string (contents of CONSTRAINTS.md verified entries, if available)
+- negative_memory_context: string (relevant entries from DECISIONS.md Negative Memory, if available)
+
+Output:
+- merged_understanding: string (max 3 sentences)
+- resolution_log: list of {tension, resolution, evidence_basis} (or "unresolved — needs <check>")
+- recommendation: string (single concrete action)
+- confidence: high | medium | low
+- confidence_basis: string
+- risk: low | medium | high
+- what_could_make_this_wrong: string
+- quality_signals:
+  - robustness: string
+  - interpretability: string
+  - coherence: string
+  - reuse_potential: string

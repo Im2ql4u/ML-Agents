@@ -23,6 +23,7 @@ PAIRS=(
   "cursor/prompts/experts/codebase.md:vscode/prompts/experts/codebase.prompt.md"
   "cursor/prompts/experts/prioritization.md:vscode/prompts/experts/prioritization.prompt.md"
   "cursor/prompts/experts/operations.md:vscode/prompts/experts/operations.prompt.md"
+  "cursor/prompts/experts/synthesis.md:vscode/prompts/experts/synthesis.prompt.md"
   "cursor/rules/core.mdc:vscode/copilot-instructions.md"
   "cursor/rules/python.mdc:vscode/instructions/python.instructions.md"
   "cursor/rules/config.mdc:vscode/instructions/config.instructions.md"
