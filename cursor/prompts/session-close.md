@@ -120,6 +120,15 @@ Key carry-forward:
 - <most important uncertainty>
 ```
 
+### Step 5 — Memory consolidation (lightweight)
+
+Run the **lightweight variant** of the memory-consolidation skill:
+1. Scan this session's outputs for candidate patterns (repeated findings, confirmed failures, stable decisions)
+2. If any candidate crosses the promotion threshold (3+ occurrences across sessions), update `CONSTRAINTS.md`
+3. Produce the Working State Snapshot and append to `SESSION_LOG.md`
+
+If `CONSTRAINTS.md` does not exist yet and this session produced a finding worth tracking, create it from the template.
+
 ---
 
 ## Full Close (opt-in)
@@ -265,6 +274,20 @@ See ARCHIVE.md for full history.
 
 ---
 
+### Step 6.5 — Memory consolidation (full)
+
+Run the **full** memory-consolidation skill:
+1. Inventory current memory state (CONSTRAINTS.md, DECISIONS.md, JOURNAL.md, ARCHIVE.md)
+2. Extract candidate patterns — repeated findings, stable decisions, confirmed negative patterns
+3. Promote qualifying patterns to `CONSTRAINTS.md` (create from template if it doesn't exist)
+4. Compress episodic memory if JOURNAL.md > 8 entries or ARCHIVE.md > 10 entries
+5. Prune Negative Memory entries that have been resolved or promoted to CONSTRAINTS.md
+6. Produce Working State Snapshot and append to SESSION_LOG.md
+
+Report memory consolidation results as part of the Step 7 chat report.
+
+---
+
 ### Step 7 — Report in chat
 
 After writing all logs, say in chat:
@@ -275,7 +298,8 @@ Session closed. Here is what was recorded:
 **Archive entry written:** [YYYY-MM-DD] — <title>
 **DECISIONS.md:** <n entries added, or "no new entries">
 **JOURNAL.md:** <n entries added, or "no new entries">
-**SESSION_LOG.md:** reset for next session
+**CONSTRAINTS.md:** <n promoted / n suspected / no changes>
+**SESSION_LOG.md:** reset for next session + working state snapshot
 
 Key things carried forward:
 - <most important open question>

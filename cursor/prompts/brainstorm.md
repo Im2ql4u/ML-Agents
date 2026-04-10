@@ -15,7 +15,8 @@ This prompt is typically invoked after `session-open`, `diagnose`, or `review`. 
 Before exploring directions, re-state the project’s overall objective (from session-open context or `SESSION_LOG.md`). Every idea generated should visibly connect back to this objective. If an idea is exciting but tangential to the project goal, say so explicitly — don’t let the conversation drift away from the trunk.
 
 Before proposing directions:
-- Check recent findings in `SESSION_LOG.md`
+- Check `CONSTRAINTS.md` first if it exists — verified constraints are durable project truths that bound the solution space. Suspected constraints are hypotheses worth testing. Do not propose directions that violate verified constraints without explicitly arguing why the constraint should be retired.
+- Check recent findings in `SESSION_LOG.md` (including `## Working State Snapshot` if present)
 - Reuse unresolved risks and open questions
 - Check `JOURNAL.md` for negative results so failed directions are not repeated unless the failure cause has changed
 

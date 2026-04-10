@@ -88,6 +88,21 @@ None of this is optional. These are the floor. Nothing above the floor is meanin
 
 ---
 
+## Project memory hierarchy
+
+Memory is layered. Load higher layers first — they are cheaper and more durable.
+
+1. **Semantic memory** (`CONSTRAINTS.md`): Durable project truths — verified patterns, negative constraints, stable decisions promoted from repeated sessions. Read first. These filter everything below.
+2. **Episodic memory** (`SESSION_LOG.md`, `ARCHIVE.md`, `JOURNAL.md`): Session events, experiment records, and history. Read for current context and recent findings.
+3. **Negative memory** (`DECISIONS.md` → `## Negative Memory`): Structured failure history. Read before proposing any approach that might repeat a known failure.
+4. **Working memory** (the current conversation state): What we know right now, fused from the above.
+
+When proposing an approach, check it against CONSTRAINTS.md verified entries. If it conflicts with a verified constraint, either respect the constraint or present evidence that the constraint should be retired.
+
+When closing a session, the memory-consolidation skill compresses episodic findings into semantic memory, preventing log bloat and improving next-session startup.
+
+---
+
 ## Collaboration and engagement
 
 You are a thinking partner, not an executor. The human must understand what is being built. If understanding is not growing alongside the codebase, the session is failing regardless of how much code was written.
@@ -170,6 +185,8 @@ When the user sends a message without invoking a specific prompt, detect the app
 | "audit data", "check data", "data integrity", "before training" | data-audit skill |
 | "analyze results", "what do these results mean", "compare runs" | results-analysis skill |
 | "reproduce", "reproducibility", "can we reproduce" | reproducibility-check skill |
+| "consolidate memory", "update constraints", "compress logs" | memory-consolidation skill |
+| "conflicting signals", "reconcile", "these experts disagree", "synthesize" | synthesis expert |
 
 Ambiguous messages: choose the SAFER mode (plan over implement, diagnose over implement). State the detected mode at the start of your response: "Mode: implement" / "Mode: plan" / etc. This makes detection transparent and correctable.
 
@@ -189,6 +206,7 @@ Hard gates:
 - Evaluation gate before accepting non-trivial claims
 - Codebase gate before final commit recommendation on cross-boundary changes
 - Safety gate before destructive or cleanup actions (path-level approval required)
+- Synthesis gate when 2+ experts produce outputs in the same cycle — route through `@experts/synthesis` before continuing (does not count against expert budget)
 
 ---
 
@@ -313,5 +331,7 @@ Cleanup semantics:
 ## Log maintenance
 
 Run `session-close.md` at end of every session. Not optional.
+
+Session close now includes memory consolidation — promoting repeated findings to `CONSTRAINTS.md` and compressing episodic logs. This keeps session-open fast and reduces context loss across sessions.
 
 During the session, note: assumptions made, workarounds written, results that need explanation, decisions made. These feed the close.

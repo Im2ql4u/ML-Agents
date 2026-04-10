@@ -22,6 +22,7 @@ Before writing the plan:
 - Use relevant findings from the immediately preceding `session-open`, `diagnose`, `review`, or `brainstorm` output
 - Reuse prior negative findings in `JOURNAL.md` so failed directions are not repeated without a stated reason
 - Check `DECISIONS.md` → `## Negative Memory` for structured failure history. If any prior failed approach is relevant to this plan's objective, list it in the Context section and explain how this plan avoids the same failure. If no relevant failures exist, note "no relevant negative history."
+- Check `CONSTRAINTS.md` if it exists. List any verified constraints that affect this plan. Every plan step must respect verified constraints — if a step would violate one, either redesign the step or explicitly argue for retiring the constraint with evidence.
 
 Do not re-ground the entire repository unless there is missing context that blocks planning.
 

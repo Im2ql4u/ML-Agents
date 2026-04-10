@@ -31,9 +31,10 @@ Do not proceed until these are clear.
 
 ### Step 2 — Read only high-signal logs
 
-Read:
+Read in this order (semantic memory first, then episodic):
 
-- `SESSION_LOG.md` — full file
+- `CONSTRAINTS.md` — full file, if it exists. These are durable project truths — verified patterns and negative constraints promoted from prior sessions. Load these before anything else so all subsequent reading is filtered through known constraints. If it does not exist, note "no semantic memory yet."
+- `SESSION_LOG.md` — full file (including `## Working State Snapshot` if present)
 - `DECISIONS.md` — latest 1–2 entries AND the full `## Negative Memory` section
 - `JOURNAL.md` — latest 1–2 entries
 - `ARCHIVE.md` — latest entry only
@@ -75,6 +76,8 @@ Report on:
 
 **Risk to this task** — what could invalidate this work if wrong
 
+**Constraint check** — list any entries from `CONSTRAINTS.md` (verified or suspected) that are relevant to today's task. If a verified constraint directly affects the approach, state how the task plan respects it. If no constraints file exists, state "no semantic memory yet."
+
 **Negative-history check** — check `DECISIONS.md` → `## Negative Memory` section AND recent `JOURNAL.md` NEGATIVE entries. If any prior failed or inconclusive approach is relevant to today's task, list it explicitly and state what this session must avoid. If no relevant failures exist, state "no relevant negative history."
 
 **Comparison opportunity** — if 2+ recent experiment entries target the same question, note that a comparison entry should be produced at close
@@ -100,6 +103,7 @@ Use this when broad re-grounding is needed.
 
 Read these files in full if they exist. Note any that are missing.
 
+- `CONSTRAINTS.md` — full file. These are durable project truths. Load first so all subsequent reading is filtered through known constraints. If not present, note "no semantic memory yet."
 - `SESSION_LOG.md` — full file
 - `DECISIONS.md` — full file
 - `JOURNAL.md` — full file
@@ -147,6 +151,8 @@ State what is verified and what is assumed. Do not conflate them.
 **Open questions** — unresolved things that need a decision before proceeding
 
 **Negative-history check** — check `DECISIONS.md` → `## Negative Memory` section AND `JOURNAL.md` NEGATIVE entries. List relevant failed approaches and their implications for today's plan. If no relevant failures exist, state "no relevant negative history."
+
+**Constraint check** — list any verified or suspected constraints from `CONSTRAINTS.md` that affect the current direction. If any constraint conflicts with the current plan or trajectory, flag it explicitly. If no constraints file exists, state "no semantic memory yet."
 
 **Comparison opportunity** — whether current and prior experiments should be summarized as a comparison entry at close
 

@@ -45,7 +45,8 @@ You have access to specialized experts. Invoke them when you discover a **new** 
 1. Read the confirmed plan file (user must attach it with `#file:plans/...` if not already in chat). **If the plan is not in this conversation, ask the user to attach it before proceeding.**
 2. Identify the **active phase** (or all steps if the plan has no phases).
 3. State the **project objective** from the plan’s `## Project objective` field (or from `SESSION_LOG.md`). This is the trunk — every implementation decision should serve it.
-4. Extract and state these fields explicitly for the active phase only:
+4. Read `CONSTRAINTS.md` if it exists. Note any verified constraints that affect the active phase. These are non-negotiable unless the plan explicitly argues for retiring them. If an implementation step would violate a verified constraint, stop and flag it.
+5. Extract and state these fields explicitly for the active phase only:
    - **Scope in:** What files/modules can I change?
    - **Scope out:** What must I not touch?
    - **Acceptance checks:** Exact verification for each step (command + expected output, not vague). **If any acceptance check is not an executable command**, rewrite it as one before proceeding. Example: "model defined" → `python -c "from src.model import X; print(X)"`. If unclear, ask.
