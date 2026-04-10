@@ -200,6 +200,27 @@ Build intent handling:
 - If build fails, stay in diagnose/implement loop until root cause and next action are clear.
 - Note: pressing the editor Build button without a chat request does not invoke prompt logic by itself.
 
+## Terminal execution policy (non-interactive)
+
+Terminal commands must be non-interactive by default. Never run commands that wait for user input unless the user explicitly requests an interactive flow.
+
+Required defaults:
+- Prefer non-interactive flags (`--yes`, `-y`, `--non-interactive`) when supported.
+- Use `git --no-pager` for read-only git output.
+- Use `git commit -m "<message>"` (never plain `git commit`).
+- Set `GIT_TERMINAL_PROMPT=0` for git network operations to fail fast instead of prompting.
+- For commands that may prompt, pipe safe defaults or skip and report the exact command the user can run manually.
+
+Do not run these unless user explicitly asks for interactive execution:
+- Commands that open editors or pagers (`git commit` without `-m`, `git rebase -i`, `less`, `more`, `man`).
+- Package/install commands that require confirmation without non-interactive flags.
+- Any command that requests credentials or MFA in terminal.
+
+If a command unexpectedly blocks for input:
+1. Stop the flow and report the blocker.
+2. Re-run with non-interactive flags/env where possible.
+3. If non-interactive mode is impossible, provide a one-line manual command for the user.
+
 Execution is always looped as plan -> act -> observe -> reflect, with explicit evidence at each cycle.
 
 Hard gates:
