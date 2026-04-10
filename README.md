@@ -15,29 +15,30 @@ The workflow is built around a few core principles:
 - The agent stops at every real decision and workaround and asks — it does not silently choose.
 - Understanding grows alongside the codebase. Every session ends with reflection, not just output.
 
-## What changed yesterday and today (practical)
+## Core capabilities
 
-These additions are now integrated in both Cursor and VS Code prompt stacks.
+ML-Agents provides a disciplined runtime for coding, debugging, and evaluation workflows in ML projects.
 
-1. Association/fusion step:
-- New synthesis expert merges multiple expert outputs into one decision when signals conflict.
-- Routing is defined in `core/orchestrator.md` and output contracts in `tools/INTERFACES.md`.
+1. Structured orchestration
+- Central routing and execution contracts in `EXECUTION_KERNEL.md`, `core/orchestrator.md`, and `tools/INTERFACES.md`.
+- Consistent plan -> act -> observe -> reflect loop across direct asks and prompt-invoked workflows.
 
-2. Memory consolidation:
-- New skill consolidates session findings into durable memory files.
-- Session close now supports both lightweight and full consolidation flows.
+2. Expert-driven escalation
+- Trigger-based specialist invocation (evaluation, architecture, data, codebase, prioritization, operations).
+- Synthesis expert support to merge conflicting specialist outputs into one actionable recommendation.
 
-3. Semantic constraints memory:
-- New `CONSTRAINTS.md` template captures verified constraints and anti-patterns.
-- Session open, diagnose, brainstorm, plan, implement, and review now check constraints earlier.
+3. Memory architecture
+- Episodic memory via `SESSION_LOG.md`, `JOURNAL.md`, and `ARCHIVE.md`.
+- Semantic and negative memory via `CONSTRAINTS.md` and `DECISIONS.md`.
+- Session-close memory consolidation for durable carryover between sessions.
 
-4. Phase 3 evaluation integration:
-- Review now uses a quality scorecard (robustness, interpretability, coherence, reuse, safety).
-- Diagnose now requires hypothesis competition and fix-quality impact scoring.
+4. Evaluation integrity
+- Review pathways enforce evidence quality and intent alignment.
+- Quality scoring dimensions are explicitly tracked: robustness, interpretability, coherence, reuse, and safety.
 
-## Quick usage (daily workflow)
+## Quick start workflow
 
-Use this in your project repo after install:
+Use this sequence in your project repository after installation:
 
 ```text
 @session-open
@@ -48,14 +49,14 @@ Use this in your project repo after install:
 @session-close
 ```
 
-Practical trigger phrases you can type directly in chat:
+Typical trigger phrases in chat:
 - "Diagnose why this fails" -> routes to diagnose mode first
 - "Can we trust this result?" -> routes to review validate mode
-- "Consolidate memory" or "update constraints" -> routes to memory consolidation path
+- "Consolidate memory" or "update constraints" -> routes to memory consolidation flow
 
-## Brain-inspired cognition mapping
+## Cognitive design model
 
-This system imitates cognition as an engineering metaphor (not biological simulation):
+ML-Agents uses brain-inspired concepts as engineering metaphors (not biological simulation):
 
 | Brain function (analogy) | ML-Agents mechanism | Practical effect |
 |---|---|---|
