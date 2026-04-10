@@ -15,6 +15,68 @@ The workflow is built around a few core principles:
 - The agent stops at every real decision and workaround and asks — it does not silently choose.
 - Understanding grows alongside the codebase. Every session ends with reflection, not just output.
 
+## What changed yesterday and today (practical)
+
+These additions are now integrated in both Cursor and VS Code prompt stacks.
+
+1. Association/fusion step:
+- New synthesis expert merges multiple expert outputs into one decision when signals conflict.
+- Routing is defined in `core/orchestrator.md` and output contracts in `tools/INTERFACES.md`.
+
+2. Memory consolidation:
+- New skill consolidates session findings into durable memory files.
+- Session close now supports both lightweight and full consolidation flows.
+
+3. Semantic constraints memory:
+- New `CONSTRAINTS.md` template captures verified constraints and anti-patterns.
+- Session open, diagnose, brainstorm, plan, implement, and review now check constraints earlier.
+
+4. Phase 3 evaluation integration:
+- Review now uses a quality scorecard (robustness, interpretability, coherence, reuse, safety).
+- Diagnose now requires hypothesis competition and fix-quality impact scoring.
+
+## Quick usage (daily workflow)
+
+Use this in your project repo after install:
+
+```text
+@session-open
+@brainstorm           # optional, only if problem framing is unclear
+@plan                 # or ask naturally: "plan this fix with acceptance checks"
+@implement
+@review -- validate: <claim>
+@session-close
+```
+
+Practical trigger phrases you can type directly in chat:
+- "Diagnose why this fails" -> routes to diagnose mode first
+- "Can we trust this result?" -> routes to review validate mode
+- "Consolidate memory" or "update constraints" -> routes to memory consolidation path
+
+## Brain-inspired cognition mapping
+
+This system imitates cognition as an engineering metaphor (not biological simulation):
+
+| Brain function (analogy) | ML-Agents mechanism | Practical effect |
+|---|---|---|
+| Executive control (PFC) | Orchestrator + mode routing | Keeps work aligned with objective and risk gates |
+| Attention gating (thalamic-like) | Trigger-based expert escalation | Invokes specialists only when needed |
+| Competing action selection (basal ganglia-like) | Hypothesis competition + prioritization gates | Reduces random trial-and-error |
+| Association cortex | Synthesis expert | Resolves conflicting expert outputs into one action |
+| Episodic memory (hippocampal-like) | SESSION_LOG/JOURNAL/ARCHIVE | Preserves session trace and context |
+| Semantic memory | CONSTRAINTS.md + DECISIONS.md | Promotes stable rules and anti-patterns |
+| Quality modulation | Review scorecard + evaluation gate | Prevents "looks good" from passing without integrity |
+
+## Documentation index
+
+Top-level is kept focused on the runtime contracts and install/update flow. Research/design notes were moved to `docs/research/`:
+
+- `docs/research/ANALYSIS.md`
+- `docs/research/example.md`
+- `docs/research/neural_agent.md`
+- `docs/research/neuralidea.md`
+- `docs/research/NEUROINSPIRED_AGENT_ARCHITECTURE.md`
+
 ---
 
 ## Install

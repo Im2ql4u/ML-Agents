@@ -1,1 +1,15 @@
 .DS_Store
+
+# Local scratch markdown notes (root-level)
+/scratch-*.md
+/notes-*.md
+/tmp-*.md
+/brainstorm-*.md
+/session-dump-*.md
+
+# Legacy ad-hoc research notes (keep these out of root)
+/ANALYSIS.md
+/example.md
+/neural_agent.md
+/neuralidea.md
+/NEUROINSPIRED_AGENT_ARCHITECTURE.md
