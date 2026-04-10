@@ -12,6 +12,7 @@ You have access to specialized experts. During diagnosis, if you identify any of
 - **Architecture mismatch suspected** (Layer 3 — model structurally cannot learn this) → run `@experts/architecture.md` with the failure pattern and ask: "Is there a known failure mode that explains this?"
 - **Data problem suspected** (Layer 1 — pipeline, splits, leakage) → run `@experts/data.md` with your characterization and ask: "Is the data setup safe and valid?"
 - **Module boundary risk** (proposed fix spans multiple files or introduces coupling) → run `@experts/codebase.md` with the fix proposal and ask: "Is this change safe for the codebase?"
+- **Conflicting expert signals** (two or more experts returned during this cycle with different recommendations) → run `@experts/synthesis.md` with all expert outputs to reconcile before acting. The synthesis expert does not count against the 2-expert budget.
 
 **How to invoke:** Type `@experts/<name>` in the next line, paste your findings, and let the expert provide guidance before you continue.
 
@@ -39,6 +40,7 @@ Read the description of what is happening. Then answer:
 - What exactly is the symptom? (metric, error, behaviour)
 - When did this start? Did it work before and break, or has it never worked?
 - What has already been tried, and what effect did each attempt have?
+- Check `CONSTRAINTS.md` if it exists — does any verified constraint explain or relate to this failure? If so, the constraint narrows the hypothesis space immediately.
 
 Distinguish between: never worked, worked then broke, works sometimes but inconsistently, works but results are suspicious. These point to different causes.
 
@@ -112,6 +114,18 @@ If more than one plausible hypothesis remains, list the top two and prioritize b
 
 Do not state a diagnosis with false confidence. If you are uncertain between two layers, say so and explain how to determine which one it is.
 
+### Hypothesis competition rule
+
+When two or more hypotheses remain after investigation, they must be explicitly competed — not just listed:
+
+1. **Explanatory coverage** — how many observed symptoms does each hypothesis account for?
+2. **Parsimony** — does it require fewer assumptions than alternatives?
+3. **Falsifiability** — is there a concrete check that could rule it out?
+
+The winning hypothesis must dominate on at least 2 of 3 criteria. If no hypothesis dominates, do not pick one — state the discriminating check that would separate them and run it before concluding.
+
+Do not accept a diagnosis by narrative plausibility alone. A well-told story that explains fewer symptoms than a simpler hypothesis is not the better diagnosis.
+
 ---
 
 ## Step 4 — Propose fixes in structural order
@@ -125,6 +139,18 @@ For each:
 - What it does *not* fix — what would still be wrong if this were the only change
 
 Do not propose a Layer 5 fix when a Layer 1 hypothesis has not been ruled out. If you are proposing a small adjustment, explain explicitly why you are confident the layers below it are sound.
+
+### Fix quality impact (score each proposed fix)
+
+For each proposed fix, rate its impact on these dimensions (`+` positive, `=` neutral, `-` negative):
+
+- **Robustness**: does the fix make the system more or less robust?
+- **Interpretability**: does it make the system easier or harder to understand?
+- **Coherence**: does it fit the existing architecture or introduce structural debt?
+- **Reuse**: is the fix generalizable or a narrow patch?
+- **Safety**: could the fix introduce silent failure modes?
+
+If a fix scores `-` on 2+ dimensions, flag it as **high-debt** and recommend a structural alternative. Do not accept quick fixes that erode system quality unless the user explicitly accepts the trade-off.
 
 ---
 

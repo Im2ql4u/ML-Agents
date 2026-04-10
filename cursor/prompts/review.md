@@ -10,6 +10,7 @@ If you detect any of these conditions during review, **stop and invoke the exper
 - **Architecture decision review needed** → invoke `@experts/architecture.md` with the architectural change or model choice
 - **Data or split validity unknown** → invoke `@experts/data.md` with your pipeline characterization
 - **Multiple valid next steps** (after review completes) → invoke `@experts/prioritization.md` with your findings and ask which direction to pursue
+- **Conflicting expert signals** (two or more experts were invoked during this review cycle) → invoke `@experts/synthesis.md` with all expert outputs to produce one fused recommendation before concluding. The synthesis expert does not count against the 2-expert budget.
 
 ---
 
@@ -54,6 +55,29 @@ In all review modes, enforce these gates before accepting conclusions:
 - Evaluation gate: non-trivial claims must be scored by evaluation criteria
 
 When review touches cross-module boundaries or non-local refactors, route to codebase expert before recommending final commit.
+
+---
+
+## Quality scorecard (mandatory for non-trivial verdicts)
+
+Before emitting a `ship` or `iterate` verdict, score the work against these five quality dimensions. Each is rated `strong | adequate | weak | unknown`.
+
+| Dimension | Question | Rating |
+|---|---|---|
+| **Robustness** | Will this hold under distribution shift, edge cases, or adversarial inputs? | |
+| **Interpretability** | Can a domain expert understand why this works (or fails)? | |
+| **Architectural coherence** | Does this fit the project's structural choices, or introduce friction? | |
+| **Reuse potential** | Is this implementation reusable, or a one-off that will need rewriting? | |
+| **Operational safety** | Can this be deployed/run without silent degradation or data corruption? | |
+
+### Scorecard rules
+
+- A `ship` verdict requires no dimension rated `weak`.
+- Any `weak` score forces `iterate` or `rollback`.
+- If any dimension is `unknown`, it must be investigated or explicitly flagged as accepted-risk before shipping.
+- If two or more dimensions are `weak`, escalate to `@experts/evaluation.md` with the scorecard before concluding.
+- For `debug` mode: score the proposed fix, not the broken state.
+- The scorecard is included in the review output contract.
 
 ---
 
@@ -202,6 +226,12 @@ Mode used: debug | validate | full
 Primary claim assessed: <text>
 Verdict: ship | iterate | rollback | blocked
 Evidence quality: strong | moderate | weak
+Quality scorecard:
+  Robustness: <strong|adequate|weak|unknown>
+  Interpretability: <strong|adequate|weak|unknown>
+  Coherence: <strong|adequate|weak|unknown>
+  Reuse: <strong|adequate|weak|unknown>
+  Safety: <strong|adequate|weak|unknown>
 Top risks:
 - <bullet>
 - <bullet>
@@ -209,3 +239,4 @@ Next required action: <single concrete action>
 ```
 
 If `Verdict` is `ship`, include one sentence stating why alternative explanations were ruled out.
+If any quality dimension is `weak` or `unknown`, include a one-line justification for why the verdict is still acceptable (or change the verdict).
